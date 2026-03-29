@@ -3,7 +3,6 @@
 import FooterLink from "@components/Footer/FooterLink.astro";
 import SiteLogo from "@components/SiteLogo/SiteLogo.astro";
 import Button from "@components/Button/Button.astro";
-import SocialIcon from "@components/SocialIcon/SocialIcon.astro";
 
 // utils
 import { getLocaleFromUrl } from "@js/localeUtils";
@@ -21,12 +20,22 @@ const today = new Date();
     <div class="mt-6 flex flex-wrap items-center justify-between gap-6">
       <SiteLogo />
       <div class="flex flex-wrap gap-x-4">
-        <FooterLink href={getLocalizedRoute(currLocale, "/overview")}>Overview</FooterLink>
+        <FooterLink href={getLocalizedRoute(currLocale, "/about")}>
+          {currLocale === "es" ? "Nosotros" : "About"}
+        </FooterLink>
+        <FooterLink href={getLocalizedRoute(currLocale, "/portfolio")}>
+          {currLocale === "es" ? "Portafolio" : "Portfolio"}
+        </FooterLink>
         <FooterLink href={getLocalizedRoute(currLocale, "/blog")}>Blog</FooterLink>
-        <FooterLink href={getLocalizedRoute(currLocale, "/elements")}>Elements</FooterLink>
-        <FooterLink href={getLocalizedRoute(currLocale, "/contact")}>Contact</FooterLink>
-        <FooterLink href={getLocalizedRoute(currLocale, "/terms")}>Terms</FooterLink>
-        <FooterLink href={getLocalizedRoute(currLocale, "/privacy-policy")}>Privacy</FooterLink>
+        <FooterLink href={getLocalizedRoute(currLocale, "/contact")}>
+          {currLocale === "es" ? "Contacto" : "Contact"}
+        </FooterLink>
+        <FooterLink href={getLocalizedRoute(currLocale, "/privacy-policy")}>
+          {currLocale === "es" ? "Privacidad" : "Privacy"}
+        </FooterLink>
+        <FooterLink href={getLocalizedRoute(currLocale, "/terms")}>
+          {currLocale === "es" ? "Términos" : "Terms"}
+        </FooterLink>
       </div>
     </div>
   </div>
@@ -36,25 +45,13 @@ const today = new Date();
         &copy; {today.getFullYear()}
         {" "}{siteData.name}. All rights reserved.
       </div>
-      <!-- Socials -->
-      <div class="flex flex-col">
-        <div class="flex gap-4">
-          <SocialIcon
-            href="https://twitter.com/BowTiedWebReapr"
-            icon="tabler/brand-x"
-            social="twitter (x)"
-          />
-          <SocialIcon
-            href="https://twitter.com/BowTiedWebReapr"
-            icon="tabler/brand-facebook"
-            social="facebook"
-          />
-          <SocialIcon
-            href="https://twitter.com/BowTiedWebReapr"
-            icon="tabler/brand-google-filled"
-            social="google"
-          />
-        </div>
+      <div class="flex flex-col items-end gap-1 text-right">
+        <a class="hover:text-primary-600 transition" href={`mailto:${siteData.contact.email}`}>
+          {siteData.contact.email}
+        </a>
+        <a class="hover:text-primary-600 transition" href={`tel:${siteData.contact.phone.replace(/\D/g, "")}`}>
+          {siteData.contact.phone}
+        </a>
       </div>
     </div>
   </div>
