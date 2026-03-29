@@ -1,6 +1,6 @@
 # Cloudflare Pages / Workers — build with: npm run build
 # Dashboard: set build command "npm run build", output directory "dist"
-account_id = "f14808ff6176f6f680d8967f0859b65d"
+# Note: do not set account_id here — Pages rejects it for `wrangler pages deploy`; CI passes account via wrangler-action.
 name = "infratekint"
 compatibility_date = "2024-11-01"
 compatibility_flags = ["nodejs_compat"]

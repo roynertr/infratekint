@@ -1,6 +1,6 @@
 # Build + deploy to Cloudflare Pages on each push to master/main.
 # Requires repository secret: CLOUDFLARE_API_TOKEN (Cloudflare API token with Account → Cloudflare Pages → Edit).
-# account_id is read from wrangler.toml.
+# accountId is set below (Pages wrangler.toml must not include account_id — it breaks CI validation).
 #
 # If you also connect this repo in the Cloudflare dashboard (Git integration), disable one flow to avoid double deploys.
 
@@ -45,6 +45,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: f14808ff6176f6f680d8967f0859b65d
           command: pages deploy dist --project-name=infratekint
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
