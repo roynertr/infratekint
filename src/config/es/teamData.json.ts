@@ -1,6 +1,6 @@
 import { type teamMember } from "@config/types/configDataTypes";
 
-import Royner from "@images/ashton_blackwell.jpg";
+import Royner from "@images/company/royner-tineo.jpg";
 
 export const teamData: teamMember[] = [
   {
