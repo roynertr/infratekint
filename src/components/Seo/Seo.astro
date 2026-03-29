@@ -33,11 +33,19 @@ interface BlogProps extends BaseProps {
   postFrontmatter: CollectionEntry<"blog">["data"];
 }
 
-const { type, title, description, image, noindex = false } = Astro.props as GenProps | BlogProps;
+const { type, title: titleProp, description: descProp, image, noindex = false } = Astro.props as
+  | GenProps
+  | BlogProps;
+
+// SSR / view transitions: title can be missing; astro-seo requires openGraph.basic.title, type, image
+const title =
+  typeof titleProp === "string" && titleProp.trim().length > 0 ? titleProp : siteData.title;
+const description =
+  typeof descProp === "string" && descProp.trim().length > 0 ? descProp : siteData.description;
 
 let optimizedImage;
 let jsonLD;
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 
 // if this is a blog page we do things differently
 if (type === "blog") {
@@ -65,17 +73,19 @@ else {
   });
 }
 
-function trimEndSlash(str: string) {
-  if (str[str.length - 1] === "/") {
-    return str.slice(0, -1);
-  } else {
-    return str;
+const baseForUrls = Astro.site ?? Astro.url;
+
+function absoluteOgImage(src: string): string {
+  try {
+    return new URL(src, baseForUrls).href;
+  } catch {
+    return new URL(siteData.defaultImage.src, baseForUrls).href;
   }
 }
 
-// put together the image URL
-const imageUrl =
-  trimEndSlash(Astro.site?.toString() || "") + (optimizedImage?.src || siteData.defaultImage.src);
+const imageUrl = optimizedImage?.src
+  ? absoluteOgImage(optimizedImage.src)
+  : absoluteOgImage(siteData.defaultImage.src);
 ---
 
 <SEO
@@ -95,8 +105,8 @@ const imageUrl =
     },
     image: {
       type: "image/webp",
-      width: optimizedImage?.attributes.width || "1200",
-      height: optimizedImage?.attributes.height || "800",
+      width: Number(optimizedImage?.attributes.width) || 1200,
+      height: Number(optimizedImage?.attributes.height) || 800,
       alt: title,
     },
   }}

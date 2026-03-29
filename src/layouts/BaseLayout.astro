@@ -42,7 +42,7 @@ const currLocale = getLocaleFromUrl(Astro.url);
 ---
 
 <!doctype html>
-<html lang={currLocale} transition:animate="fade">
+<html lang={currLocale}>
   <head>
     <BaseHead
       type={type}
@@ -65,26 +65,42 @@ const currLocale = getLocaleFromUrl(Astro.url);
     </div>
     <Footer />
 
-    <!-- Scroll animations -->
+    <!-- Scroll animations (data-mos starts at opacity:0 in mos.css until MOS runs — if init fails, body class is removed below) -->
     <script>
       import { MOS } from "motion-on-scroll";
 
       import { siteSettings } from "@/config/siteSettings.json";
 
-      if (siteSettings.useAnimations === true) {
-        MOS.init({
-          offset: 120,
-          duration: 0.75,
-          timeUnits: "s",
-          distance: 100,
-          delay: 0,
-          easing: "ease-out-cubic",
-          once: true,
-          mirror: false,
-        });
+      function bootMos() {
+        if (siteSettings.useAnimations !== true) return;
 
-        document.addEventListener("astro:after-swap", MOS.refreshHard);
+        try {
+          MOS.init({
+            offset: 120,
+            duration: 0.75,
+            timeUnits: "s",
+            distance: 100,
+            delay: 0,
+            easing: "ease-out-cubic",
+            once: true,
+            mirror: false,
+          });
+
+          document.addEventListener("astro:after-swap", MOS.refreshHard);
+          document.addEventListener("astro:page-load", () => {
+            requestAnimationFrame(() => MOS.refreshHard());
+          });
+
+          // Re-measure after layout/fonts (fixes invisible [data-mos] if first pass ran too early)
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => MOS.refreshHard());
+          });
+        } catch {
+          document.body.classList.remove("use-animations");
+        }
       }
+
+      bootMos();
     </script>
   </body>
 </html>

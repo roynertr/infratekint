@@ -11,6 +11,9 @@ import keystatic from "@keystatic/astro";
 import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
+// react-dom/server.edge fixes Cloudflare Workers (MessageChannel); it breaks Node dev (require), so alias only in production build.
+const prod = process.env.NODE_ENV === "production";
+
 export default defineConfig({
   site: "https://infratekint.com",
   output: "server",
@@ -45,7 +48,12 @@ export default defineConfig({
     }),
     mdx(),
     react(),
-    icon(),
+    icon({
+      include: {
+        // FeatureCardsSmall uses Iconify "tabler:code" (local SVG for this name was unreliable in astro-icon’s pipeline)
+        tabler: ["code"],
+      },
+    }),
     keystatic(),
     sitemap(),
     compress({
@@ -59,11 +67,12 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
-    // React 19 SSR on Cloudflare Workers: browser react-dom/server uses MessageChannel (unavailable in workerd)
     resolve: {
-      alias: {
-        "react-dom/server": "react-dom/server.edge",
-      },
+      alias: prod
+        ? {
+            "react-dom/server": "react-dom/server.edge",
+          }
+        : {},
     },
     // stop inlining short scripts to fix issues with ClientRouter
     build: {

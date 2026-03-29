@@ -12,6 +12,8 @@ import ExternalLink from "@components/MarkdownComponents/ExternalLink.astro";
 import { filterCollectionByLanguage } from "@js/localeUtils";
 import { defaultLocale } from "@config/siteSettings.json";
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const services = await getCollection("services", ({ data }) => {
     // filter out draft services
