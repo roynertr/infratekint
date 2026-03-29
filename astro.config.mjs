@@ -59,6 +59,12 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    // React 19 SSR on Cloudflare Workers: browser react-dom/server uses MessageChannel (unavailable in workerd)
+    resolve: {
+      alias: {
+        "react-dom/server": "react-dom/server.edge",
+      },
+    },
     // stop inlining short scripts to fix issues with ClientRouter
     build: {
       assetsInlineLimit: 0,
