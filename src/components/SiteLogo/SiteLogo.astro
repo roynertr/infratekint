@@ -1,0 +1,23 @@
+---
+// utils
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getTranslatedData, getLocalizedRoute } from "@js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<a
+  class="primary-focus text-base-600 dark:text-base-200 flex items-center gap-3 align-middle text-xl font-bold tracking-tight"
+  href={getLocalizedRoute(currLocale, "/")}
+>
+  <img
+    src="/images/infratek-wordmark.svg"
+    alt=""
+    width="160"
+    height="32"
+    class="h-8 w-auto"
+    loading="eager"
+  />
+  <span class="sr-only">{siteData.name}</span>
+</a>

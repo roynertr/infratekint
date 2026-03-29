@@ -1,0 +1,75 @@
+---
+/**
+ * * These are small cards with icons, titles, and text. With title first
+ * This looks best with an even number of cards. They are smaller to
+ * use with more cards in the same section. 4 or 6 cards is probably ideal
+ *
+ * ! I copy all icons into the src/icons folder and recommend you do the same
+ * ! If the icon is at src/icons/tabler/paint.svg then you put in "tabler/paint"
+ */
+
+import { Icon } from "astro-icon/components";
+
+// components
+import FeatureCard from "@components/FeatureCard/FeatureCardSmall.astro";
+import Badge from "@components/Badge/Badge.astro";
+
+interface FeatureData {
+  icon: string;
+  title: string;
+  text: string;
+}
+
+// data
+const featureData: FeatureData[] = [
+  {
+    icon: "tabler/bulb",
+    title: "Business enhancement",
+    text: `We align BIM, data, and delivery so owners and contractors get measurable outcomes—not just models.`,
+  },
+  {
+    icon: "tabler/list-check",
+    title: "Data management",
+    text: `Structured information—COBie, properties, and handover—so facilities teams can operate with clarity.`,
+  },
+  {
+    icon: "tabler/code",
+    title: "Innovation & customization",
+    text: `Custom viewers, integrations, and digital twins when off-the-shelf tools stop short of your workflow.`,
+  },
+  {
+    icon: "tabler/circle-check",
+    title: "Precision & reliability",
+    text: `Disciplined coordination, validation, and documentation that hold up through construction and handover.`,
+  },
+];
+---
+
+<section
+  id="feature-cards-small"
+  class="bg-[url('/assets/pattern-light.svg')] bg-center bg-no-repeat py-24 md:py-28 dark:bg-[url('/assets/pattern-dark.svg')]"
+>
+  <div class="site-container relative">
+    <div class="mx-auto mb-16 text-center md:max-w-4xl" data-mos="fade-up">
+      <Badge>Why InfraTek</Badge>
+      <h2 class="h2 mb-4">Maximizing client value with advanced BIM innovation</h2>
+      <p class="description text-lg text-pretty md:text-xl">
+        We combine technical depth with pragmatic delivery—so technology serves the project, not the other way around.
+      </p>
+    </div>
+    <div id="trigger-small-cards" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        featureData.map((feature, idx) => (
+          <FeatureCard
+            title={feature.title}
+            text={feature.text}
+            icon={feature.icon}
+            data-mos="zoom-in"
+            data-mos-delay={0.15 * idx}
+            data-mos-anchor="#trigger-small-cards"
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,73 @@
+---
+/**
+ * * These are alternating side cards with titles, text, and images
+ * Recommend using 2 or 3 cards in a row
+ */
+import ServiceCard from "@components/ServiceCard/ServiceCardSideImage.astro";
+import Badge from "@components/Badge/Badge.astro";
+
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getLocalizedRoute } from "@js/translationUtils";
+
+// images
+import image1 from "@images/house.jpg";
+import image2 from "@images/living-room.jpg";
+import image3 from "@images/paint-swatches.jpg";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const L = (path: string) => getLocalizedRoute(currLocale, path);
+
+interface ServiceItem {
+  image: ImageMetadata;
+  title: string;
+  details: string;
+  href: string;
+}
+
+const serviceData: ServiceItem[] = [
+  {
+    image: image1,
+    title: "Comprehensive BIM Services",
+    details: `Optimize the building lifecycle with our inclusive BIM suite—from modeling and standards to coordination and documentation—so decisions stay tied to reliable data.`,
+    href: L("/services/bim-services/"),
+  },
+  {
+    image: image2,
+    title: "COBie Consultancy",
+    details: `Streamline facility operations with structured handover data: requirements, mapping, validation, and training so O&M teams can trust what they receive.`,
+    href: L("/services/cobie-consultancy/"),
+  },
+  {
+    image: image3,
+    title: "Digital Twins & Software Development",
+    details: `Custom digital solutions and IFC-centric workflows—viewers, integrations, and prototypes that evolve into production tools your teams actually use.`,
+    href: L("/services/digital-twins-software/"),
+  },
+];
+---
+
+<section id="services-side-image" class="overflow-hidden py-24 md:py-28">
+  <div class="site-container">
+    <div class="mx-auto mb-16 text-center md:mb-20 md:max-w-4xl" data-mos="fade-up">
+      <Badge>Services</Badge>
+      <h2 class="h2 mb-4">Solutions across the project lifecycle</h2>
+      <p class="description text-lg md:text-xl">
+        BIM, structured handover, and tailored software—scoped to your standards, tools, and schedule.
+      </p>
+    </div>
+    <div class="flex flex-col gap-16 md:mt-16 md:gap-24">
+      {
+        serviceData.map((feature, idx) => (
+          <ServiceCard
+            title={feature.title}
+            details={feature.details}
+            image={feature.image}
+            imageSide={idx % 2 === 0 ? "right" : "left"}
+            href={feature.href}
+            idx={idx}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>

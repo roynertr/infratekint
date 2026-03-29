@@ -1,0 +1,115 @@
+---
+/**
+ * Contact form — POST /api/contact (Resend). Set RESEND_API_KEY and CONTACT_FROM_EMAIL in production.
+ */
+import Button from "@components/Button/Button.astro";
+---
+
+<section id="contact" class="mx-auto max-w-3xl min-w-fit rounded-lg">
+  <form id="contact-form" class="flex flex-col gap-4" novalidate>
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div class="flex flex-col">
+        <label for="contact-name" class="form__label sr-only">Name <span class="text-red-600">*</span></label>
+        <input
+          type="text"
+          class="form__input"
+          name="name"
+          id="contact-name"
+          placeholder="Name"
+          required
+          autocomplete="name"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="contact-phone" class="form__label sr-only">Phone</label>
+        <input
+          type="tel"
+          class="form__input"
+          name="phone"
+          id="contact-phone"
+          inputmode="tel"
+          placeholder="Phone (optional)"
+          autocomplete="tel"
+        />
+      </div>
+    </div>
+    <div>
+      <label for="contact-email" class="form__label sr-only mb-1"
+        >Email <span class="text-red-600">*</span></label
+      >
+      <input
+        type="email"
+        class="form__input"
+        name="email"
+        id="contact-email"
+        inputmode="email"
+        placeholder="Email"
+        required
+        autocomplete="email"
+      />
+    </div>
+    <div>
+      <label for="contact-message" class="form__label sr-only mb-1"
+        >Message <span class="text-red-600">*</span></label
+      >
+      <textarea
+        name="message"
+        class="form__input"
+        id="contact-message"
+        rows="5"
+        placeholder="How can we help?"
+        required></textarea>
+    </div>
+    <p id="contact-form-status" class="description hidden text-sm" role="status"></p>
+    <Button variant="primary" type="submit" id="contact-submit">Send message</Button>
+  </form>
+</section>
+
+<script>
+  const form = document.getElementById("contact-form") as HTMLFormElement | null;
+  const statusEl = document.getElementById("contact-form-status");
+  const submitBtn = document.getElementById("contact-submit") as HTMLButtonElement | null;
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!statusEl || !submitBtn) return;
+
+    statusEl.classList.add("hidden");
+    statusEl.textContent = "";
+    submitBtn.disabled = true;
+
+    const fd = new FormData(form);
+    const payload = {
+      name: String(fd.get("name") || "").trim(),
+      email: String(fd.get("email") || "").trim(),
+      phone: String(fd.get("phone") || "").trim(),
+      message: String(fd.get("message") || "").trim(),
+    };
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+
+      if (res.ok && data.ok) {
+        statusEl.textContent = "Thank you — your message has been sent.";
+        statusEl.classList.remove("hidden", "text-red-600");
+        statusEl.classList.add("text-primary-600");
+        form.reset();
+      } else {
+        statusEl.textContent = data.error || "Could not send message. Please try again later.";
+        statusEl.classList.remove("hidden");
+        statusEl.classList.add("text-red-600");
+      }
+    } catch {
+      statusEl.textContent = "Network error. Please try again.";
+      statusEl.classList.remove("hidden");
+      statusEl.classList.add("text-red-600");
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+</script>

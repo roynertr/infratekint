@@ -1,0 +1,6 @@
+# Cloudflare Pages / Workers — build with: npm run build
+# Dashboard: set build command "npm run build", output directory "dist"
+name = "infratekint"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"

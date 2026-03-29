@@ -1,0 +1,27 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Button from "@components/Button/Button.astro";
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getTranslatedData, getLocalizedRoute } from "@js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const siteData = getTranslatedData("siteData", currLocale);
+---
+
+<BaseLayout
+  title="Portfolio"
+  description="Selected BIM, data, and digital delivery work from InfraTek."
+>
+  <div class="site-container mx-auto mt-16 max-w-3xl py-16 md:py-24">
+    <h1 class="h1 mb-6">Trusted by industry leaders</h1>
+    <p class="description mb-8 text-lg">
+      We collaborate with engineering and construction teams on BIM coordination, COBie handover, and
+      custom digital workflows. Case studies and visuals from live engagements can be shared under NDA—reach
+      out to discuss your project.
+    </p>
+    <Button variant="primary" href={getLocalizedRoute(currLocale, "/contact")}>Talk with an expert</Button>
+    <p class="description mt-10 text-sm">
+      {siteData.contact.phone} · {siteData.contact.email}
+    </p>
+  </div>
+</BaseLayout>
