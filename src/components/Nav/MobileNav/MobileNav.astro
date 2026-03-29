@@ -4,7 +4,6 @@ import { Icon } from "astro-icon/components";
 //components
 import NavLink from "@components/Nav/NavLink.astro";
 import MobileNavDropdown from "@components/Nav/MobileNav/MobileNavDropdown.astro";
-import Button from "@components/Button/Button.astro";
 import MobileLanguageSelect from "@components/LanguageSelect/MobileLanguageSelect.astro";
 import ThemeToggle from "@components/ThemeToggle/ThemeToggle.astro";
 
@@ -74,15 +73,6 @@ import { locales } from "@config/siteSettings.json";
           }
         </ul>
       </nav>
-      <div class="mx-1 mt-3 px-4">
-        <Button
-          variant="secondary"
-          class="w-full shadow-none"
-          href="https://cosmicthemes.com/themes/atlas/"
-        >
-          Get Atlas
-        </Button>
-      </div>
 
       <div class="mt-4 flex items-start justify-between pr-2 pl-4">
         <ThemeToggle />

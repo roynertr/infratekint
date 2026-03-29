@@ -11,13 +11,23 @@ const siteData = getTranslatedData("siteData", currLocale);
   class="primary-focus text-base-600 dark:text-base-200 flex items-center gap-3 align-middle text-xl font-bold tracking-tight"
   href={getLocalizedRoute(currLocale, "/")}
 >
-  <img
-    src="/images/infratek-wordmark.svg"
-    alt=""
-    width="160"
-    height="32"
-    class="h-8 w-auto"
-    loading="eager"
-  />
+  <span class="inline-flex shrink-0 items-center">
+    <img
+      src="/images/infratek-logo-horizontal.svg"
+      alt=""
+      width="176"
+      height="32"
+      class="h-8 w-auto max-w-[min(100%,11rem)] dark:hidden"
+      loading="eager"
+    />
+    <img
+      src="/images/infratek-logo-horizontal-dark.svg"
+      alt=""
+      width="176"
+      height="32"
+      class="hidden h-8 w-auto max-w-[min(100%,11rem)] dark:block"
+      loading="eager"
+    />
+  </span>
   <span class="sr-only">{siteData.name}</span>
 </a>
