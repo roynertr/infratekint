@@ -28,7 +28,7 @@ import { locales } from "@config/siteSettings.json";
     <div class="site-container flex h-14 w-full items-center">
       <header class="relative flex w-full items-center gap-2">
         <!-- home button / image -->
-        <div class="flex flex-auto justify-start">
+        <div class="flex min-w-0 shrink flex-auto justify-start">
           <SiteLogo />
         </div>
 
@@ -36,10 +36,10 @@ import { locales } from "@config/siteSettings.json";
           
         </div> -->
 
-        <!-- desktop nav menu -->
-        <div class="flex flex-auto justify-end">
-          <nav class="hidden md:block">
-            <ul class="flex h-fit items-center px-4">
+        <!-- desktop nav menu (lg: wide enough for logo + links + controls — md tablet used to overlap) -->
+        <div class="flex min-w-0 flex-auto justify-end">
+          <nav class="hidden lg:block">
+            <ul class="flex h-fit shrink-0 items-center px-4">
               {
                 // if dropdown exists, setup the dropdown, otherwise it is just a link
                 navData.map((navItem) =>
@@ -60,12 +60,12 @@ import { locales } from "@config/siteSettings.json";
             </ul>
           </nav>
 
-          <ThemeToggle class="mr-3 -ml-4 hidden md:block" />
+          <ThemeToggle class="mr-3 -ml-4 hidden lg:block" />
 
-          {locales.length > 1 && <LanguageSelect class="ml-4 hidden md:block" />}
+          {locales.length > 1 && <LanguageSelect class="ml-4 hidden lg:block" />}
 
           <!-- mobile nav menu, only load on small screens where it is visible -->
-          <div class="md:hidden">
+          <div class="lg:hidden">
             <MobileNav />
           </div>
         </div>
@@ -79,7 +79,7 @@ import { locales } from "@config/siteSettings.json";
   @import "@/styles/tailwind-theme.css" theme(reference);
 
   .navbar--scrolled {
-    @apply bg-background border-b;
+    @apply bg-background/92 border-b backdrop-blur-md backdrop-saturate-150 border-brand-botticelli/35;
   }
 
   .navbar--initial {

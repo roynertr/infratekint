@@ -1,0 +1,6 @@
+name: Barrick
+slug: barrick
+alt: Barrick logo
+logo: ./logo.png
+order: 50
+draft: false

@@ -10,6 +10,7 @@ const siteData = getTranslatedData("siteData", defaultLocale);
 
 // utils
 import { getAllPosts } from "@js/blogUtils";
+import { normalizeImportedExcerpt } from "@js/textUtils";
 
 // you can switch the RSS locale here to something else if desired
 const rssLocale = "es";
@@ -41,7 +42,7 @@ export async function GET(context) {
     // items (each post)
     items: posts.map((post) => ({
       title: post.data.title,
-      description: post.data.description,
+      description: normalizeImportedExcerpt(post.data.description),
       pubDate: post.data.pubDate,
       author: `${getAuthorEmail(post.data.authors[0].id)} (${getAuthorName(
         post.data.authors[0].id,

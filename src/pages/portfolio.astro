@@ -1,27 +1,60 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Button from "@components/Button/Button.astro";
+import Badge from "@components/Badge/Badge.astro";
+import PortfolioCard from "@components/Portfolio/PortfolioCard.astro";
+import PortfolioFilters from "@components/Portfolio/PortfolioFilters.astro";
 import { getLocaleFromUrl } from "@js/localeUtils";
 import { getTranslatedData, getLocalizedRoute } from "@js/translationUtils";
+import { getAllPortfolio } from "@js/portfolioUtils";
 
 const currLocale = getLocaleFromUrl(Astro.url);
 const siteData = getTranslatedData("siteData", currLocale);
+const projects = await getAllPortfolio(currLocale);
+const categories = [...new Set(projects.flatMap((project) => project.data.categories))];
 ---
 
 <BaseLayout
   title="Portfolio"
-  description="Selected BIM, data, and digital delivery work from InfraTek."
+  description="Selected BIM, data, and digital delivery work from INFRATEK."
 >
-  <div class="site-container mx-auto mt-16 max-w-3xl py-16 md:py-24">
-    <h1 class="h1 mb-6">Trusted by industry leaders</h1>
-    <p class="description mb-8 text-lg">
-      We collaborate with engineering and construction teams on BIM coordination, COBie handover, and
-      custom digital workflows. Case studies and visuals from live engagements can be shared under NDA—reach
-      out to discuss your project.
-    </p>
-    <Button variant="primary" href={getLocalizedRoute(currLocale, "/contact")}>Talk with an expert</Button>
-    <p class="description mt-10 text-sm">
-      {siteData.contact.phone} · {siteData.contact.email}
-    </p>
-  </div>
+  <section class="site-container overflow-x-clip py-20 md:py-28">
+    <div
+      class="bg-base-100 dark:bg-base-900/40 border-base-200/70 dark:border-base-700/70 rounded-3xl border bg-[url('/assets/pattern-light.svg')] bg-center p-8 text-center md:p-12 dark:bg-[url('/assets/pattern-dark.svg')]"
+    >
+      <Badge>Portfolio</Badge>
+      <h1 class="h1 mx-auto mt-4 max-w-4xl">Trusted digital delivery for complex built assets.</h1>
+      <p class="description mx-auto mt-6 max-w-3xl text-lg">
+        Selected BIM, reality capture, coordination, and digital workflow projects delivered by
+        INFRATEK across industrial, commercial, and infrastructure environments.
+      </p>
+
+      <PortfolioFilters
+        categories={categories}
+        allLabel="All"
+        countSingular="project"
+        countPlural="projects"
+      />
+    </div>
+
+    <div class="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+      {projects.map((project) => <PortfolioCard project={project} />)}
+    </div>
+
+    <div class="mt-16 rounded-2xl bg-base-100 p-8 text-center shadow-sm dark:bg-base-900">
+      <h2 class="h3">Have a similar project?</h2>
+      <p class="description mx-auto mt-3 max-w-2xl">
+        Let’s talk about BIM coordination, COBie handover, digital twins, or reality capture for
+        your next asset.
+      </p>
+      <div class="mt-6">
+        <Button variant="primary" href={getLocalizedRoute(currLocale, "/contact")}>
+          Talk with an expert
+        </Button>
+      </div>
+      <p class="description mt-6 text-sm">
+        {siteData.contact.phone} · {siteData.contact.email}
+      </p>
+    </div>
+  </section>
 </BaseLayout>

@@ -69,7 +69,8 @@ const Blog = (locale: (typeof locales)[number]) =>
       heroImage: fields.image({
         label: "Hero Image",
         publicPath: "../",
-        validation: { isRequired: true },
+        description:
+          "Optional. If omitted, the public portfolio uses a branded INFRATEK placeholder.",
       }),
       categories: fields.array(fields.text({ label: "Category" }), {
         label: "Categories",
@@ -245,10 +246,239 @@ const Services = (locale: (typeof locales)[number]) =>
   });
 
 /**
+ * * Portfolio / case studies collection
+ * This gets used by Astro Content Collections, so if you update this, you'll need to update the Astro Content Collections schema
+ */
+const Portfolio = (locale: (typeof locales)[number]) =>
+  collection({
+    label: `Portfolio (${locale.toUpperCase()})`,
+    slugField: "title",
+    path: `src/data/portfolio/${locale}/*/`,
+    columns: ["title", "pubDate"],
+    entryLayout: "content",
+    format: { contentField: "content" },
+    schema: {
+      title: fields.slug({
+        name: { label: "Title" },
+        slug: {
+          label: "SEO-friendly slug",
+          description: "Never change the slug once a project is published!",
+        },
+      }),
+      description: fields.text({
+        label: "Description",
+        validation: { isRequired: true, length: { min: 1, max: 300 } },
+      }),
+      draft: fields.checkbox({
+        label: "Draft",
+        description: "Hide this project from the public portfolio until unchecked.",
+      }),
+      pubDate: fields.date({ label: "Publish Date" }),
+      heroImage: fields.image({
+        label: "Hero Image",
+        publicPath: "../",
+        validation: { isRequired: true },
+      }),
+      categories: fields.array(fields.text({ label: "Category" }), {
+        label: "Categories",
+        description: "Optional filters on the portfolio index.",
+        itemLabel: (props) => props.value || "Category",
+      }),
+      tags: fields.array(fields.text({ label: "Tag" }), {
+        label: "Tags",
+        itemLabel: (props) => props.value || "Tag",
+      }),
+      sourceId: fields.integer({
+        label: "Source ID",
+        description:
+          "Legacy ID from the original CMS if migrated. Use 0 for new INFRATEK-only case studies.",
+      }),
+      sourceUrl: fields.url({
+        label: "Source URL",
+        description:
+          "Public URL for “original source” / reference (e.g. archived case study or live page).",
+      }),
+      mappingKey: fields.text({
+        label: "Mapping Key",
+        description: "Same key on EN and ES entries links them for SEO / alternates.",
+      }),
+      content: fields.mdx({
+        label: "Project narrative",
+        description:
+          "Full case study body. Use headings, lists, and links (e.g. to Contact) like blog posts.",
+        options: {
+          bold: true,
+          italic: true,
+          strikethrough: true,
+          code: true,
+          heading: [2, 3, 4, 5, 6],
+          blockquote: true,
+          orderedList: true,
+          unorderedList: true,
+          table: true,
+          link: true,
+          image: {
+            directory: `src/data/portfolio/${locale}/`,
+            publicPath: "../",
+          },
+          divider: true,
+          codeBlock: true,
+        },
+        components: {
+          Admonition: ComponentBlocks.Admonition,
+        },
+      }),
+    },
+  });
+
+/**
  * * Other Pages collection
  * For items like legal pages, about pages, etc.
  * This gets used by Astro Content Collections, so if you update this, you'll need to update the Astro Content Collections schema
  */
+/**
+ * Home page marquee gallery (three images, duplicated in rows by the component).
+ * Edit in Keystatic under “Home — Marquee gallery”.
+ */
+const HomeMarquee = () =>
+  collection({
+    label: "Home — Marquee gallery",
+    slugField: "slug",
+    path: "src/data/home-marquee/*/",
+    columns: ["slug"],
+    format: { data: "yaml" },
+    schema: {
+      slug: fields.slug({
+        name: {
+          label: "Entry name",
+          validation: {
+            isRequired: true,
+          },
+        },
+        slug: {
+          label: "Slug",
+          description: "Keep this as home-marquee — single entry for the home page strip.",
+        },
+      }),
+      imageBim: fields.image({
+        label: "Image 1 — BIM / coordination",
+        directory: "src/data/home-marquee/images",
+        publicPath: "../../../public/",
+        validation: { isRequired: true },
+      }),
+      imageCobie: fields.image({
+        label: "Image 2 — COBie / data",
+        directory: "src/data/home-marquee/images",
+        publicPath: "../../../public/",
+        validation: { isRequired: true },
+      }),
+      imageDigital: fields.image({
+        label: "Image 3 — Digital delivery",
+        directory: "src/data/home-marquee/images",
+        publicPath: "../../../public/",
+        validation: { isRequired: true },
+      }),
+    },
+  });
+
+/**
+ * Home — Trusted by: eyebrow, title, and summary for EN / ES (single entry).
+ */
+const HomeTrustedBy = () =>
+  collection({
+    label: "Home — Trusted by (copy)",
+    slugField: "slug",
+    path: "src/data/home-trusted-by/*/",
+    columns: ["slug"],
+    format: { data: "yaml" },
+    schema: {
+      slug: fields.slug({
+        name: {
+          label: "Entry name",
+          validation: {
+            isRequired: true,
+          },
+        },
+        slug: {
+          label: "Slug",
+          description: "Keep as home-trusted-by — one entry for this section.",
+        },
+      }),
+      eyebrowEn: fields.text({
+        label: "Eyebrow (English)",
+        validation: { isRequired: true },
+      }),
+      titleEn: fields.text({
+        label: "Title (English)",
+        validation: { isRequired: true },
+      }),
+      summaryEn: fields.text({
+        label: "Summary (English)",
+        multiline: true,
+        validation: { isRequired: true },
+      }),
+      eyebrowEs: fields.text({
+        label: "Eyebrow (Spanish)",
+        validation: { isRequired: true },
+      }),
+      titleEs: fields.text({
+        label: "Title (Spanish)",
+        validation: { isRequired: true },
+      }),
+      summaryEs: fields.text({
+        label: "Summary (Spanish)",
+        multiline: true,
+        validation: { isRequired: true },
+      }),
+    },
+  });
+
+/**
+ * Home — Client logos: one entry per brand; order controls display sequence.
+ */
+const ClientLogos = () =>
+  collection({
+    label: "Home — Client logos",
+    slugField: "slug",
+    path: "src/data/client-logos/*/",
+    columns: ["slug", "order"],
+    format: { data: "yaml" },
+    schema: {
+      slug: fields.slug({
+        name: {
+          label: "Brand name",
+          validation: {
+            isRequired: true,
+          },
+        },
+        slug: {
+          label: "Folder slug",
+          description: "Short ID for this entry (folder name). Do not change after publish if possible.",
+        },
+      }),
+      alt: fields.text({
+        label: "Image alt text",
+        description: "Accessibility, e.g. Fenwal logo",
+        validation: { isRequired: true },
+      }),
+      logo: fields.image({
+        label: "Logo image",
+        description: "PNG or SVG with clear space; original colors preferred.",
+        publicPath: "../",
+        validation: { isRequired: true },
+      }),
+      order: fields.integer({
+        label: "Sort order",
+        description: "Lower numbers appear first (e.g. 10, 20, 30).",
+        validation: { isRequired: true },
+      }),
+      draft: fields.checkbox({
+        label: "Draft",
+        description: "When checked, this logo is hidden on the home page.",
+      }),
+    },
+  });
+
 const OtherPages = (locale: (typeof locales)[number]) =>
   collection({
     label: `Other Pages (${locale.toUpperCase()})`,
@@ -308,5 +538,9 @@ export default {
   Blog,
   Authors,
   Services,
+  Portfolio,
   OtherPages,
+  HomeMarquee,
+  HomeTrustedBy,
+  ClientLogos,
 };

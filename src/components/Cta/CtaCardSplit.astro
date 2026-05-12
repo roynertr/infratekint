@@ -7,11 +7,31 @@ import { Icon } from "astro-icon/components";
 
 // components
 import Button from "@components/Button/Button.astro";
+
+// utils
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getLocalizedRoute } from "@js/translationUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+const copy = {
+  en: {
+    title: "Ready to make your project data work harder?",
+    description: "Let's align BIM, COBie, and digital delivery around your next milestone.",
+    button: "Contact INFRATEK",
+  },
+  es: {
+    title: "¿Listo para que los datos de su proyecto trabajen mejor?",
+    description: "Alineemos BIM, COBie y entrega digital con su próximo hito.",
+    button: "Contactar a INFRATEK",
+  },
+} as const;
+
+const t = copy[currLocale];
 ---
 
 <section class="py-10">
   <div class="site-container">
-    <div class="bg-primary-500 relative overflow-hidden rounded-md px-16 py-11 md:py-20">
+    <div class="bg-brand-bg relative overflow-hidden rounded-3xl px-16 py-11 shadow-xl shadow-brand-bg/10 md:py-20">
       <Icon
         name="atlas/dots3"
         class="text-accent-4 absolute top-0 left-4 z-10 size-16"
@@ -31,19 +51,13 @@ import Button from "@components/Button/Button.astro";
       <div class="relative z-20 -m-3 flex flex-wrap items-center">
         <div class="w-full p-3 md:w-1/2">
           <h2 class="mb-6 text-4xl font-bold tracking-tighter text-white">
-            What are you waiting for? Get started today.
+            {t.title}
           </h2>
-          <p class="font-semibold text-white">Level up with this theme.</p>
+          <p class="text-brand-cruise font-semibold">{t.description}</p>
         </div>
         <div class="flex w-full p-3 md:w-1/2 md:justify-end">
-          <Button
-            variant="outline"
-            href="https://cosmicthemes.com/themes/atlas/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="shadow-none"
-          >
-            Get Atlas
+          <Button variant="outline" href={getLocalizedRoute(currLocale, "/contact")} class="shadow-none">
+            {t.button}
           </Button>
         </div>
       </div>

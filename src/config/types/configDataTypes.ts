@@ -58,7 +58,9 @@ export interface FaqItem {
 // --------------------------------------------------------
 // testimonial data types
 export interface TestimonialItem {
-  avatar: ImageMetadata; // an imported image
+  /** Optional photo; when omitted, `initials` is shown in the avatar circle */
+  avatar?: ImageMetadata;
+  initials: string;
   name: string;
   title: string;
   testimonial: string;

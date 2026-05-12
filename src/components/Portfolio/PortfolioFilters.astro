@@ -1,0 +1,100 @@
+---
+// utils
+import { humanize } from "@js/textUtils";
+
+interface Props {
+  categories: string[];
+  allLabel: string;
+  countSingular: string;
+  countPlural: string;
+}
+
+const { categories, allLabel, countSingular, countPlural } = Astro.props as Props;
+---
+
+<div
+  data-portfolio-filters
+  data-count-singular={countSingular}
+  data-count-plural={countPlural}
+  class="mt-8"
+>
+  <div class="flex flex-wrap justify-center gap-3" aria-label="Portfolio category filters">
+    <button
+      type="button"
+      data-portfolio-filter="all"
+      data-active="true"
+      aria-pressed="true"
+      class="bg-brand-malibu text-brand-bg ring-brand-malibu/30 rounded-full px-3 py-1 text-xs font-semibold uppercase shadow-sm ring-2 transition hover:-translate-y-0.5 hover:shadow-md aria-pressed:bg-brand-malibu aria-pressed:text-brand-bg aria-pressed:ring-brand-malibu/30"
+    >
+      {allLabel}
+    </button>
+
+    {
+      categories.map((category) => (
+        <button
+          type="button"
+          data-portfolio-filter={category}
+          data-active="false"
+          aria-pressed="false"
+          class="bg-brand-cruise/60 text-brand-bg hover:bg-brand-botticelli/80 dark:bg-brand-malibu/10 dark:text-brand-malibu dark:hover:bg-brand-malibu/20 ring-brand-malibu/0 rounded-full px-3 py-1 text-xs font-semibold uppercase shadow-sm ring-2 transition hover:-translate-y-0.5 hover:shadow-md aria-pressed:bg-brand-malibu aria-pressed:text-brand-bg aria-pressed:ring-brand-malibu/30"
+        >
+          {humanize(category)}
+        </button>
+      ))
+    }
+  </div>
+
+  <p class="text-base-400 mt-4 text-center text-sm" aria-live="polite" data-portfolio-count>
+  </p>
+</div>
+
+<script>
+  function initPortfolioFilters() {
+    document.querySelectorAll("[data-portfolio-filters]").forEach((filterGroup) => {
+      if (filterGroup.getAttribute("data-ready") === "true") return;
+      filterGroup.setAttribute("data-ready", "true");
+
+      const buttons = filterGroup.querySelectorAll("[data-portfolio-filter]");
+      const count = filterGroup.querySelector("[data-portfolio-count]");
+      const singular = filterGroup.getAttribute("data-count-singular") ?? "project";
+      const plural = filterGroup.getAttribute("data-count-plural") ?? "projects";
+
+      function applyFilter(category) {
+        const cards = document.querySelectorAll("[data-portfolio-card]");
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const categories = (card.getAttribute("data-categories") ?? "")
+            .split(",")
+            .filter(Boolean);
+          const isVisible = category === "all" || categories.includes(category);
+
+          card.toggleAttribute("hidden", !isVisible);
+          card.classList.toggle("hidden", !isVisible);
+          if (isVisible) visibleCount += 1;
+        });
+
+        buttons.forEach((button) => {
+          const isActive = button.getAttribute("data-portfolio-filter") === category;
+          button.setAttribute("aria-pressed", String(isActive));
+          button.setAttribute("data-active", String(isActive));
+        });
+
+        if (count) {
+          count.textContent = `${visibleCount} ${visibleCount === 1 ? singular : plural}`;
+        }
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyFilter(button.getAttribute("data-portfolio-filter") ?? "all");
+        });
+      });
+
+      applyFilter("all");
+    });
+  }
+
+  initPortfolioFilters();
+  document.addEventListener("astro:page-load", initPortfolioFilters);
+</script>

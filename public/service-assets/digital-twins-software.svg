@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Digital Twins and Software Development illustration</title>
+  <desc id="desc">Digital twin interface connected to live asset data streams.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0A2333"/>
+      <stop offset="1" stop-color="#102c42"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#031018" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="760" rx="44" fill="url(#bg)"/>
+  <g opacity=".13" stroke="#66CBFF" stroke-width="2">
+    <path d="M126 168c158-72 250 72 404 0s244 72 404 0"/>
+    <path d="M126 322c158-72 250 72 404 0s244 72 404 0"/>
+    <path d="M126 476c158-72 250 72 404 0s244 72 404 0"/>
+    <path d="M126 630c158-72 250 72 404 0s244 72 404 0"/>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="178" y="140" width="844" height="482" rx="32" fill="#f6fbfd"/>
+    <rect x="178" y="140" width="844" height="78" rx="32" fill="#66CBFF"/>
+    <circle cx="230" cy="179" r="11" fill="#0A2333"/>
+    <circle cx="270" cy="179" r="11" fill="#0A2333"/>
+    <circle cx="310" cy="179" r="11" fill="#0A2333"/>
+  </g>
+  <g transform="translate(250 280)">
+    <path d="M0 160V62L82 20l82 42v98l-82 42z" fill="#BFD8E4"/>
+    <path d="M82 20v182M0 62l82 47 82-47M0 160l82-51 82 51" fill="none" stroke="#0A2333" stroke-linejoin="round" stroke-width="7"/>
+    <circle cx="82" cy="109" r="22" fill="#39F1AD"/>
+  </g>
+  <g fill="none" stroke="#0A2333" stroke-linecap="round" stroke-width="8">
+    <path d="M510 330h320"/>
+    <path d="M510 410h260"/>
+    <path d="M510 490h350"/>
+  </g>
+  <g fill="#39F1AD">
+    <circle cx="880" cy="330" r="20"/>
+    <circle cx="820" cy="410" r="20"/>
+    <circle cx="910" cy="490" r="20"/>
+  </g>
+  <g fill="#66CBFF" font-family="Montserrat, Arial, sans-serif" font-size="30" font-weight="700">
+    <text x="510" y="286">OpenBIM data stream</text>
+  </g>
+  <path d="M468 390c-60-40-60-118 0-158" fill="none" stroke="#F39343" stroke-linecap="round" stroke-width="10"/>
+</svg>

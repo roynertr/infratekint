@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import { Icon } from "astro-icon/components";
 
 // data
 import { type TestimonialItem } from "@config/types/configDataTypes";
@@ -9,7 +8,7 @@ interface Props extends TestimonialItem {
   rest?: any;
 }
 
-const { avatar, name, title, testimonial, ...rest } = Astro.props as TestimonialItem;
+const { avatar, initials, name, title, testimonial, ...rest } = Astro.props as TestimonialItem;
 ---
 
 <div
@@ -18,7 +17,19 @@ const { avatar, name, title, testimonial, ...rest } = Astro.props as Testimonial
 >
   <p class="dark:text-base-100 text-lg font-medium">{testimonial}</p>
   <div class="mt-8 flex items-center gap-4">
-    <Image src={avatar} alt={name} height={100} class="size-12 rounded-full object-cover" />
+    {
+      avatar ? (
+        <Image src={avatar} alt="" height={100} class="size-12 rounded-full object-cover" />
+      ) : (
+        <div
+          class="border-brand-malibu bg-brand-bg text-brand-malibu flex size-12 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold"
+          aria-hidden="true"
+          title={name}
+        >
+          {initials}
+        </div>
+      )
+    }
     <div>
       <p class="dark:text-base-100 font-semibold">{name}</p>
       <p class="text-base-500 dark:text-base-400">{title}</p>

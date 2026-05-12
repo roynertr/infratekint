@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">COBie Consultancy illustration</title>
+  <desc id="desc">Structured facility handover data organized in connected tables.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0A2333"/>
+      <stop offset="1" stop-color="#123246"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#031018" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="760" rx="44" fill="url(#bg)"/>
+  <g opacity=".12" fill="none" stroke="#BFD8E4" stroke-width="2">
+    <path d="M112 150h976M112 302h976M112 454h976M112 606h976"/>
+    <path d="M204 90v580M396 90v580M588 90v580M780 90v580M972 90v580"/>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="225" y="160" width="750" height="420" rx="28" fill="#f6fbfd"/>
+    <rect x="225" y="160" width="750" height="82" rx="28" fill="#66CBFF"/>
+    <path d="M225 242h750M225 326h750M225 410h750M225 494h750M425 160v420M650 160v420M800 160v420" stroke="#BFD8E4" stroke-width="4"/>
+  </g>
+  <g fill="#0A2333" font-family="Montserrat, Arial, sans-serif" font-weight="700">
+    <text x="270" y="213" font-size="28">Asset</text>
+    <text x="465" y="213" font-size="28">Space</text>
+    <text x="690" y="213" font-size="28">Type</text>
+    <text x="835" y="213" font-size="28">Status</text>
+  </g>
+  <g fill="#0A2333" opacity=".72" font-family="Montserrat, Arial, sans-serif" font-size="24">
+    <text x="270" y="294">AHU-01</text>
+    <text x="465" y="294">Level 03</text>
+    <text x="690" y="294">Mechanical</text>
+    <text x="835" y="294">Validated</text>
+    <text x="270" y="378">PMP-12</text>
+    <text x="465" y="378">Plant</text>
+    <text x="690" y="378">Equipment</text>
+    <text x="835" y="378">Ready</text>
+    <text x="270" y="462">ELV-02</text>
+    <text x="465" y="462">Core</text>
+    <text x="690" y="462">Transport</text>
+    <text x="835" y="462">Checked</text>
+  </g>
+  <circle cx="1030" cy="570" r="58" fill="#39F1AD"/>
+  <path d="m1002 570 20 20 40-46" fill="none" stroke="#0A2333" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/>
+</svg>

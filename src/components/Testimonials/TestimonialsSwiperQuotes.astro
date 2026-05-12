@@ -19,6 +19,18 @@ import { getTranslatedData } from "@js/translationUtils";
 // data
 const currLocale = getLocaleFromUrl(Astro.url);
 const testimonialData = getTranslatedData("testimonialData", currLocale);
+const copy = {
+  en: {
+    badge: "Trusted by teams",
+    title: "Trusted for BIM and asset information workflows",
+  },
+  es: {
+    badge: "Confianza",
+    title: "Aliados para flujos BIM e información de activos",
+  },
+} as const;
+
+const t = copy[currLocale];
 ---
 
 <section
@@ -27,8 +39,8 @@ const testimonialData = getTranslatedData("testimonialData", currLocale);
 >
   <div class="site-container">
     <div class="flex flex-col items-center justify-center" data-mos="fade-right">
-      <Badge>Testimonials</Badge>
-      <h2 class="h2 text-center">Our customers love us</h2>
+      <Badge>{t.badge}</Badge>
+      <h2 class="h2 text-center">{t.title}</h2>
     </div>
 
     <div class="mt-6 overflow-hidden pb-10 md:mt-10" data-mos="fade-left">

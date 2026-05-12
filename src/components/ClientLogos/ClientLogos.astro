@@ -1,0 +1,84 @@
+---
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+
+import Badge from "@components/Badge/Badge.astro";
+
+import { getLocaleFromUrl } from "@js/localeUtils";
+
+const currLocale = getLocaleFromUrl(Astro.url);
+
+const trustedEntries = await getCollection("homeTrustedBy");
+const trustedEntry =
+  trustedEntries.find((e) => e.data.slug === "home-trusted-by") ?? trustedEntries[0];
+if (!trustedEntry) {
+  throw new Error(
+    "[ClientLogos] Missing trusted-by copy. Add src/data/home-trusted-by/home-trusted-by/index.yaml",
+  );
+}
+
+const copy =
+  currLocale === "es"
+    ? {
+        eyebrow: trustedEntry.data.eyebrowEs,
+        title: trustedEntry.data.titleEs,
+        summary: trustedEntry.data.summaryEs,
+      }
+    : {
+        eyebrow: trustedEntry.data.eyebrowEn,
+        title: trustedEntry.data.titleEn,
+        summary: trustedEntry.data.summaryEn,
+      };
+
+const logoEntries = await getCollection("clientLogos");
+const visibleLogos = logoEntries
+  .filter((e) => e.data.draft !== true)
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<section
+  id="client-logos"
+  class="bg-brand-bg/95 overflow-hidden py-20 text-white md:py-24"
+  aria-labelledby="client-logos-title"
+>
+  <div class="site-container">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.4fr)] lg:items-center">
+      <div data-mos="fade-right">
+        <Badge>{copy.eyebrow}</Badge>
+        <h2 id="client-logos-title" class="mb-4 text-3xl leading-tight font-bold text-pretty md:text-4xl">
+          {copy.title}
+        </h2>
+        <p class="max-w-2xl text-base leading-relaxed text-brand-botticelli md:text-lg">
+          {copy.summary}
+        </p>
+      </div>
+
+      <div
+        id="client-logo-grid"
+        class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6"
+        data-mos="fade-left"
+        data-mos-anchor="#client-logos"
+      >
+        {
+          visibleLogos.map((entry, idx) => (
+            <div
+              class="group border-brand-botticelli/45 flex min-h-28 items-center justify-center rounded-2xl border bg-white px-4 py-5 shadow-xl shadow-black/10 transition duration-300 hover:-translate-y-1 hover:border-brand-malibu hover:shadow-brand-malibu/15"
+              data-mos="zoom-in"
+              data-mos-delay={0.08 * idx}
+              data-mos-anchor="#client-logo-grid"
+            >
+              <Image
+                src={entry.data.logo}
+                alt={entry.data.alt}
+                width={320}
+                height={88}
+                loading="lazy"
+                class="max-h-14 w-full object-contain transition duration-300 group-hover:scale-105 sm:max-h-16"
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

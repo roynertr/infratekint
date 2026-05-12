@@ -1,30 +1,36 @@
 /* buttons, 4 types "primary", "secondary", "outline", "ghost" */
 .button {
-  @apply flex items-center justify-center rounded-md px-7 py-3 font-medium transition-colors;
+  @apply flex items-center justify-center rounded-xl px-7 py-3 font-semibold transition-colors;
   @apply focus-visible:ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
   @apply disabled:pointer-events-none;
 }
 
 .button--primary {
-  @apply bg-primary-500 text-white shadow-md;
-  @apply hover:bg-primary-600;
-  @apply focus-visible:ring-primary-500;
+  @apply bg-brand-malibu text-brand-bg shadow-md shadow-brand-malibu/20;
+  @apply hover:bg-primary-400;
+  @apply focus-visible:ring-brand-malibu;
 }
 
 .button--secondary {
-  @apply bg-base-500 text-base-50 shadow-sm;
-  @apply hover:bg-base-600;
-  @apply focus-visible:ring-base-500;
+  @apply bg-brand-bg text-brand-malibu shadow-sm shadow-brand-bg/20;
+  @apply hover:bg-primary-950;
+  @apply focus-visible:ring-brand-malibu;
 }
 
 .button--outline {
-  @apply border-base-200 bg-base-50 text-base-800 border shadow-sm;
-  @apply hover:bg-base-100;
-  @apply focus-visible:ring-base-200;
+  @apply border-brand-botticelli bg-transparent text-brand-bg border shadow-sm;
+  @apply hover:border-brand-malibu hover:bg-brand-malibu/10 dark:text-brand-malibu;
+  @apply focus-visible:ring-brand-malibu;
+}
+
+.bg-brand-bg .button--outline,
+.bg-base-900 .button--outline {
+  @apply border-brand-malibu/60 text-brand-malibu;
+  @apply hover:bg-brand-malibu hover:text-brand-bg;
 }
 
 .button--ghost {
-  @apply bg-base-50 text-base-800;
-  @apply hover:bg-base-200;
-  @apply focus-visible:ring-base-200;
+  @apply text-brand-bg dark:text-brand-malibu;
+  @apply hover:bg-brand-malibu/10;
+  @apply focus-visible:ring-brand-malibu;
 }

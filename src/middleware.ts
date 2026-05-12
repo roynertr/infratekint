@@ -3,34 +3,14 @@ import { defineMiddleware } from "astro:middleware";
 const LOCALE_COOKIE = "infratek_locale";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
-/** ISO 3166-1 alpha-2 — Spanish as primary language */
-const SPANISH_SPEAKING_COUNTRIES = new Set([
-  "ES",
-  "MX",
-  "AR",
-  "CO",
-  "CL",
-  "PE",
-  "VE",
-  "EC",
-  "GT",
-  "CU",
-  "BO",
-  "DO",
-  "HN",
-  "PY",
-  "SV",
-  "NI",
-  "CR",
-  "PA",
-  "UY",
-  "PR",
-  "GQ",
-]);
-
-function prefersSpanishFromCountry(country: string | null): boolean {
-  if (!country || country === "XX") return false;
-  return SPANISH_SPEAKING_COUNTRIES.has(country.toUpperCase());
+/** Production: block template demo routes (still available locally via `astro dev`). */
+function isExamplesPath(pathname: string): boolean {
+  return (
+    pathname === "/examples" ||
+    pathname.startsWith("/examples/") ||
+    pathname === "/es/examples" ||
+    pathname.startsWith("/es/examples/")
+  );
 }
 
 function prefersSpanishFromAcceptLanguage(header: string | null): boolean {
@@ -71,8 +51,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
+  // Demo/template pages are not served in production deployments.
+  if (import.meta.env.PROD && isExamplesPath(pathname)) {
+    return new Response(null, { status: 404, statusText: "Not Found" });
+  }
+
   const cookieLocale = readCookie(context.request.headers.get("cookie"), LOCALE_COOKIE);
-  const cfCountry = context.request.headers.get("cf-ipcountry");
   const acceptLang = context.request.headers.get("accept-language");
 
   if (pathname === "/es" || pathname.startsWith("/es/")) {
@@ -98,10 +82,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
       return next();
     }
 
-    let preferEs = prefersSpanishFromCountry(cfCountry);
-    if (!cfCountry || cfCountry === "XX") {
-      preferEs = prefersSpanishFromAcceptLanguage(acceptLang);
-    }
+    const preferEs = prefersSpanishFromAcceptLanguage(acceptLang);
 
     if (preferEs) {
       const dest = new URL("/es/", url.origin);

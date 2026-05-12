@@ -37,7 +37,14 @@ export default config({
     servicesEN: Collections.Services("en"),
     servicesES: Collections.Services("es"),
 
+    portfolioEN: Collections.Portfolio("en"),
+    portfolioES: Collections.Portfolio("es"),
+
     otherPagesEN: Collections.OtherPages("en"),
     otherPagesES: Collections.OtherPages("es"),
+
+    homeMarquee: Collections.HomeMarquee(),
+    homeTrustedBy: Collections.HomeTrustedBy(),
+    clientLogos: Collections.ClientLogos(),
   },
 });

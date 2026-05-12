@@ -1,0 +1,111 @@
+---
+import { Image } from "astro:assets";
+import { render } from "astro:content";
+
+// layout
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+// components
+import Button from "@components/Button/Button.astro";
+import PortfolioFallbackVisual from "@components/Portfolio/PortfolioFallbackVisual.astro";
+
+// utils
+import { getAllPortfolio } from "@js/portfolioUtils";
+import { formatDate, humanize, normalizeImportedExcerpt } from "@js/textUtils";
+
+const { slug } = Astro.params;
+const projects = await getAllPortfolio("es");
+const project = projects.find((project) => project.id === slug);
+
+if (!project) {
+  return Astro.redirect("/es/404");
+}
+
+const { Content } = await render(project);
+const { title, description, pubDate, heroImage, categories, tags, sourceUrl } = project.data;
+const normalizedDescription = normalizeImportedExcerpt(description);
+---
+
+<BaseLayout title={title} description={normalizedDescription} image={heroImage}>
+  <article class="site-container py-20 md:py-28">
+    <div class="mx-auto max-w-5xl text-center">
+      <div class="mb-5 flex flex-wrap justify-center gap-2">
+        {
+          categories.map((category) => (
+            <span class="bg-brand-cruise/60 text-brand-bg dark:bg-brand-malibu/10 dark:text-brand-malibu rounded-full px-3 py-1 text-xs font-semibold uppercase">
+              {humanize(category)}
+            </span>
+          ))
+        }
+      </div>
+
+      <h1 class="h1 mx-auto max-w-4xl">{title}</h1>
+      <p class="description mx-auto mt-5 max-w-3xl text-lg">{normalizedDescription}</p>
+      <p class="text-base-400 mt-5 text-sm font-medium">{formatDate(pubDate, "es")}</p>
+    </div>
+
+    <div class="mt-10 overflow-hidden rounded-3xl shadow-xl">
+      {
+        heroImage ? (
+          <Image
+            src={heroImage}
+            alt={`Imagen del proyecto ${title}`}
+            width={1600}
+            quality="high"
+            class="max-h-[72vh] w-full object-cover"
+            loading="eager"
+          />
+        ) : (
+          <PortfolioFallbackVisual title={title} size="hero" />
+        )
+      }
+    </div>
+
+    <div class="mx-auto mt-12 grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
+      <div class="markdown-content text-base-content">
+        <Content />
+      </div>
+
+      <aside class="h-fit rounded-2xl bg-base-100 p-6 shadow-sm dark:bg-base-900">
+        <h2 class="text-lg font-bold">Detalles del proyecto</h2>
+        <dl class="mt-5 space-y-4 text-sm">
+          <div>
+            <dt class="text-base-400 font-semibold uppercase tracking-wide">Fecha</dt>
+            <dd class="mt-1">{formatDate(pubDate, "es")}</dd>
+          </div>
+          <div>
+            <dt class="text-base-400 font-semibold uppercase tracking-wide">Categorías</dt>
+            <dd class="mt-2 flex flex-wrap gap-2">
+              {categories.map((category) => <span>{humanize(category)}</span>)}
+            </dd>
+          </div>
+          {
+            tags.length > 0 && (
+              <div>
+                <dt class="text-base-400 font-semibold uppercase tracking-wide">Etiquetas</dt>
+                <dd class="mt-2 flex flex-wrap gap-2">
+                  {tags.map((tag) => <span>{humanize(tag)}</span>)}
+                </dd>
+              </div>
+            )
+          }
+        </dl>
+        <div class="mt-6">
+          <Button href="/es/portfolio" variant="secondary">Volver al portafolio</Button>
+        </div>
+        {
+          sourceUrl && (
+            <a
+              href={sourceUrl}
+              class="text-primary-500 mt-4 inline-block text-sm font-semibold hover:underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Fuente original
+            </a>
+          )
+        }
+      </aside>
+    </div>
+  </article>
+</BaseLayout>

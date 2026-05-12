@@ -33,6 +33,23 @@ export function humanize(text: string): string {
   );
 }
 
+/**
+ * WordPress/CMS excerpts often end with a bracketed ellipsis entity, e.g. `[&hellip;]`.
+ * Normalizes that and common entity forms for plain-text cards, meta tags, and RSS.
+ */
+export function normalizeImportedExcerpt(text: string | undefined | null): string {
+  if (text == null || text === "") return "";
+  const ellipsis = "\u2026";
+  return text
+    .replace(/\s*\[&hellip;\]/gi, ellipsis)
+    .replace(/\s*\[&#8230;\]/g, ellipsis)
+    .replace(/&hellip;/gi, ellipsis)
+    .replace(/&#8230;/g, ellipsis)
+    .replace(/&#x2026;/gi, ellipsis)
+    .replace(/\u2026{2,}/g, ellipsis)
+    .trim();
+}
+
 // --------------------------------------------------------
 /**
  * * returns "categorified" text. runs slugify() and then replaces - with space and upper cases everything

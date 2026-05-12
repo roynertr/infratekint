@@ -10,50 +10,56 @@
 // components
 import FeatureCard from "@components/FeatureCard/FeatureCardMedium.astro";
 
+// utils
+import { getLocaleFromUrl } from "@js/localeUtils";
+
 interface FeatureData {
   icon: string;
   title: string;
   text: string;
 }
 
+const currLocale = getLocaleFromUrl(Astro.url);
+
 // data
-const featureData: FeatureData[] = [
-  {
-    icon: "tabler/paint",
-    title: "Professional quality",
-    text: `Our team of experienced painters uses high-quality materials and techniques to 
-      ensure a flawless finish that will last for years to come.`,
-  },
-  {
-    icon: "tabler/heart",
-    title: "Fair prices",
-    text: `We believe that everyone deserves a beautifully painted space, and our commitment 
-      to affordability reflects that. `,
-  },
-  {
-    icon: "tabler/clock",
-    title: "Fast service",
-    text: `We understand that time is of the essence, and we work efficiently without compromising quality.`,
-  },
-  // {
-  //   icon: "tabler/list-check",
-  //   title: "Customer satisfaction",
-  //   text: `We prioritize customer satisfaction and work closely with our clients to ensure that
-  //     their vision is brought to life.`,
-  // },
-  // {
-  //   icon: "tabler/home-heart",
-  //   title: "Durability",
-  //   text: `We use high-quality materials and techniques to ensure that our paint jobs are
-  //     durable and long-lasting.`,
-  // },
-  // {
-  //   icon: "tabler/wand",
-  //   title: "Beautiful results",
-  //   text: `Our team of skilled painters has an eye for detail and a passion for creating
-  //     beautiful spaces. We create stunning results that leave our clients thrilled.`,
-  // },
-];
+const featureDataByLocale: Record<string, FeatureData[]> = {
+  en: [
+    {
+      icon: "tabler/paint",
+      title: "Model quality",
+      text: `Coordinated BIM deliverables with clear standards, validation, and documentation teams can trust.`,
+    },
+    {
+      icon: "tabler/heart",
+      title: "Practical value",
+      text: `We focus on workflows that reduce rework, clarify responsibilities, and support better handover.`,
+    },
+    {
+      icon: "tabler/clock",
+      title: "Reliable delivery",
+      text: `Remote-ready collaboration and structured information keep decisions moving without adding bureaucracy.`,
+    },
+  ],
+  es: [
+    {
+      icon: "tabler/paint",
+      title: "Calidad del modelo",
+      text: `Entregables BIM coordinados con estándares claros, validación y documentación confiable.`,
+    },
+    {
+      icon: "tabler/heart",
+      title: "Valor práctico",
+      text: `Priorizamos flujos que reducen retrabajo, aclaran responsabilidades y mejoran la entrega.`,
+    },
+    {
+      icon: "tabler/clock",
+      title: "Entrega confiable",
+      text: `La colaboración remota y la información estructurada mantienen las decisiones en marcha.`,
+    },
+  ],
+};
+
+const featureData = featureDataByLocale[currLocale];
 ---
 
 <section

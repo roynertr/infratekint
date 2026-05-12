@@ -2,7 +2,8 @@
 // utils
 import { getLocalizedRoute } from "@js/translationUtils";
 import { getAllPosts, countItems, sortByValue } from "@js/blogUtils";
-import { humanize, slugify } from "@js/textUtils";
+import { slugify } from "@js/textUtils";
+import { formatBlogCategoryLabel } from "@js/blogCategoryLabels";
 import { getLocaleFromUrl } from "@js/localeUtils";
 
 const currLocale = getLocaleFromUrl(Astro.url);
@@ -23,9 +24,9 @@ const { showCount = false } = Astro.props as Props;
     processedCategories.map(([category, count]) => (
       <a
         href={getLocalizedRoute(currLocale, `categories/${slugify(category)}/`)}
-        class="button text-base-400 hover:bg-primary-100 hover:text-primary-600 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 dark:hover:bg-primary-500 px-4 py-1 font-semibold focus-visible:ring-2 dark:hover:text-white"
+        class="button text-brand-bg hover:bg-brand-malibu/10 hover:text-brand-bg focus-visible:ring-brand-malibu dark:text-brand-malibu dark:hover:bg-brand-malibu/20 px-4 py-1 font-semibold focus-visible:ring-2"
       >
-        {humanize(category)}
+        {formatBlogCategoryLabel(category, currLocale)}
         {showCount && <span class="text-xs opacity-70">{count}</span>}
       </a>
     ))

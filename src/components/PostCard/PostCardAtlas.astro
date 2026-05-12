@@ -8,7 +8,7 @@ import Category from "@components/Category/Category.astro";
 
 // utils
 import { getLocalizedRoute } from "@js/translationUtils";
-import { slugify, formatDate, humanize } from "@js/textUtils";
+import { slugify, formatDate, humanize, normalizeImportedExcerpt } from "@js/textUtils";
 import { getLocaleFromUrl } from "@js/localeUtils";
 
 interface Props {
@@ -74,7 +74,9 @@ const authorsData = await getEntries(authors);
     <!-- description -->
     {
       showDescription && (
-        <p class="text-base-400 mt-2 text-sm font-medium md:text-base">{description}</p>
+        <p class="text-base-400 mt-2 text-sm font-medium md:text-base">
+          {normalizeImportedExcerpt(description)}
+        </p>
       )
     }
 

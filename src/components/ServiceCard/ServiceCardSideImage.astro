@@ -4,7 +4,6 @@
  * Recommend using 2 or 3 cards in a row
  */
 
-import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 
 // components
@@ -18,14 +17,31 @@ interface Props {
   title: string; // larger title
   details: string; // text details
   href: string; // link to learn more
-  image: ImageMetadata; // an imported image
+  image: string;
+  imageDark?: string;
+  imageAlt: string;
   imageSide: "left" | "right";
   idx: number; // determines which "blob" icon svg to use. There are 4 options (0-3)
+  buttonLabel?: string;
 }
 
-const { image, title, href, idx, details, imageSide } = Astro.props as Props;
+const {
+  image,
+  imageDark,
+  imageAlt,
+  title,
+  href,
+  idx,
+  details,
+  imageSide,
+  buttonLabel = "Learn more",
+} = Astro.props as Props;
 
 const currLocale = getLocaleFromUrl(Astro.url);
+
+const thumbClass =
+  "relative rounded-xl border border-transparent " +
+  (imageDark ? "object-contain" : "object-cover");
 ---
 
 <div
@@ -39,7 +55,7 @@ const currLocale = getLocaleFromUrl(Astro.url);
     <p class="description mt-6">{details}</p>
     <div class="z-20 mt-8 flex">
       <Button variant="primary" href={getLocalizedRoute(currLocale, href)} arrow="none">
-        Learn more <span class="sr-only">about {title}</span>
+        {buttonLabel} <span class="sr-only">about {title}</span>
       </Button>
     </div>
   </div>
@@ -64,11 +80,33 @@ const currLocale = getLocaleFromUrl(Astro.url);
       ]}
       aria-hidden="true"
     />
-    <Image
-      class="relative rounded-xl border border-transparent object-cover"
-      src={image}
-      alt={title}
-      height={700}
-    />
+    {
+      imageDark ? (
+        <>
+          <img
+            class:list={[thumbClass, "relative dark:hidden"]}
+            src={image}
+            alt={imageAlt}
+            height={700}
+            loading={idx === 0 ? "eager" : "lazy"}
+          />
+          <img
+            class:list={[thumbClass, "relative hidden dark:block"]}
+            src={imageDark}
+            alt={imageAlt}
+            height={700}
+            loading={idx === 0 ? "eager" : "lazy"}
+          />
+        </>
+      ) : (
+        <img
+          class:list={[thumbClass, "relative"]}
+          src={image}
+          alt={imageAlt}
+          height={700}
+          loading={idx === 0 ? "eager" : "lazy"}
+        />
+      )
+    }
   </div>
 </div>

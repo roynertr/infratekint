@@ -16,6 +16,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# blog rewrite audit logs (local / CI)
+**/index.rewrite-log.json
+
 # macOS-specific files
 .DS_Store
 

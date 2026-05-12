@@ -1,0 +1,64 @@
+---
+title: 'Modelo BIM-FM: cómo preparar información para mantenimiento y operaciones'
+description: >-
+  Cómo estructurar un modelo BIM-FM e integrar COBie, CMMS y datos de activos
+  para mejorar mantenimiento y operaciones.
+draft: false
+authors:
+  - royner-tineo
+pubDate: 2019-08-22T00:00:00.000Z
+heroImage: ../creando-un-modelo-bim-para-mejorar-gestion-del-mantenimiento/heroImage.jpg
+categories:
+  - bim
+  - facility-management
+mappingKey: creando-un-modelo-bim-para-mejorar-gestion-del-mantenimiento
+updatedDate: '2026-05-27'
+---
+Después de crear y recopilar la información de una instalación —geometría, datos no geométricos y documentación— el siguiente reto es convertirla en un modelo BIM-FM útil para la gestión del mantenimiento y las operaciones.
+
+En términos prácticos, existen cuatro formas básicas de transferir la información de construcción hacia la operación del activo o de integrarla directamente con los sistemas de Facility Management:
+
+- **Introducción manual de datos** desde planos, documentos de fabricantes y otras fuentes hacia la plataforma CMMS del propietario. Es un proceso tedioso, propenso a errores y que retrasa el uso del CMMS después de la entrega o renovación del edificio. Para edificios modernos de tamaño medio o grande, no debería considerarse como una estrategia principal.
+- **Transferencia de datos desde un modelo BIM hacia un CMMS** utilizando un formato estándar, como COBie.
+- **Integración directa entre BIM y el sistema de gestión de instalaciones**, conectando el modelo con los flujos de operación y mantenimiento.
+- **Uso de un sistema intermediario** que se integre tanto con las herramientas de autoría BIM como con el CMMS.
+
+La transferencia unidireccional de datos hacia un CMMS ha sido, durante años, uno de los campos naturales de aplicación de COBie.
+
+## Un poco de COBie
+
+COBie fue desarrollado por el Cuerpo de Ingenieros del Ejército de los EE. UU. (USACE) y actualmente es desarrollado y mantenido por buildingSMART. Su propósito es proporcionar un marco para los atributos de información necesarios en los principales sistemas de construcción.
+
+Varios desarrolladores de software BIM y de gestión de instalaciones han creado interfaces para importar y exportar datos COBie. Sin embargo, cuando los datos COBie se exportan a un sistema CMMS independiente, los usuarios deben tener en cuenta que la información deberá validarse después de la importación.
+
+COBie también funciona como una referencia útil para definir atributos que permiten rastrear distintos tipos de equipos de construcción. Aun así, cada equipo debe aplicar criterio técnico para determinar qué subconjunto de atributos puede mantenerse actualizado y preciso durante la operación. Un enfoque LEAN de los datos BIM ayuda a conservar la información esencial para el mantenimiento continuo, evitando cargar el modelo con datos que no serán gestionados.
+
+## Ventajas de la integración BIM-CMMS
+
+La integración directa entre el modelo BIM y el sistema de gestión de instalaciones puede aportar ventajas significativas:
+
+- **Mejor validación de datos:** cuando el BIM y el sistema de gestión de instalaciones están vinculados, los datos pueden validarse desde el momento en que se ingresan. Esto reduce la necesidad de actividades posteriores de depuración durante la transferencia.
+- **Mejor acceso a los datos BIM:** los sistemas de gestión de instalaciones que incluyen planos de planta y visualización de modelos permiten que más usuarios accedan al modelo BIM desde un navegador web. Esto reduce el tiempo que el personal dedica a buscar información en planos, documentos y otras fuentes dispersas.
+- **Mejores actualizaciones durante la vida útil del edificio:** al mantener un modelo BIM operativo durante la ocupación, el propietario conserva un registro más confiable del edificio, útil como base para futuras remodelaciones, ampliaciones o intervenciones.
+
+## Ventajas de las herramientas intermediarias
+
+El uso de herramientas intermediarias ofrece flexibilidad adicional para admitir distintas vistas de los datos del CMMS. Por ejemplo, pueden facilitar la visualización de sistemas HVAC, la relación entre sistemas y espacios, o el impacto de un activo sobre determinadas áreas del edificio.
+
+Otra ventaja potencial es que pueden desarrollarse API para interactuar con varios proveedores de software BIM y CMMS, en lugar de depender de un único enlace directo. Esto permite mayor adaptabilidad cuando el propietario ya utiliza plataformas existentes y necesita integrar nuevos flujos sin reemplazar toda su infraestructura digital.
+
+> Integración entre el sistema BIM y CMMS implementada utilizando el sistema intermediario de EcoDomus. Fuente: EcoDomus.
+
+En este tipo de integración, uno de los puntos más complejos es el enlace entre las herramientas de autoría BIM y el CMMS. Existen varias razones por las cuales esta conexión puede ser difícil de establecer y mantener:
+
+- Los datos en las aplicaciones de autoría BIM casi nunca están listos para insertarse directamente en el CMMS; suelen requerir una preparación y limpieza considerable.
+- Los activos no mantenibles no entran en el CMMS y, por tanto, no son accesibles para el personal de FM mediante interfaces fáciles de usar.
+- Los CMMS generalmente no admiten versiones o fases del modelo.
+
+Cuando los sistemas BIM y FM están integrados, los datos de la instalación pueden ubicarse en uno u otro sistema, pero no necesariamente en ambos. Por eso es crítico determinar cuál será la fuente de cada conjunto de datos.
+
+> Directrices para fuentes de información de instalaciones en un sistema BIM-FM integrado. Fuente: pautas del Consorcio BIM-FM (Schley et al., 2016).
+
+## Fuentes
+
+- Schley, M., Haines, B., Roper, K., and Williams, B. (2016). *BIM for Facility Management Version 2.1*, The BIM-FM Consortium, Raleigh, N.C.

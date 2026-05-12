@@ -1,0 +1,50 @@
+---
+title: Open BIM y su relación con ISO 19650 (1/2)
+description: >-
+  Qué aporta Open BIM a ISO 19650: datos abiertos frente a propietarios y
+  panorama de IFC, IDM, MVD, BCF y bSDD.
+draft: false
+authors:
+  - royner-tineo
+pubDate: 2020-06-08T00:00:00.000Z
+heroImage: ../open-bim-y-su-relacion-con-la-norma-iso-19650-1-2/heroImage.jpg
+categories:
+  - bim
+  - implementacion
+  - openbim
+mappingKey: open-bim-y-su-relacion-con-la-norma-iso-19650-1-2
+updatedDate: '2026-05-19'
+---
+En entradas anteriores he abordado [BIM](https://www.rtric.com/bimpgm2/) de forma general. En esta serie quiero profundizar en un enfoque clave para la colaboración digital en proyectos: **Open BIM**, especialmente por su relación con la serie [ISO 19650](https://www.iso.org/standard/68078.html).
+
+Durante el diseño, la construcción y la operación de un activo, la información suele pasar por múltiples soluciones de software. En esos intercambios, lo que aporta valor no es la herramienta en sí, sino la información que se produce, comparte, valida y reutiliza. El software es el medio; la información es el activo.
+
+Históricamente, muchas innovaciones BIM han estado centradas en plataformas y estructuras nativas. Eso puede generar barreras cuando los equipos necesitan colaborar entre disciplinas, organizaciones y fases del ciclo de vida. Por eso, un enfoque basado en formatos y estándares abiertos es fundamental para reducir dependencias innecesarias y mejorar la continuidad de la información.
+
+## Open BIM e ISO 19650
+
+Dentro de un software se pueden producir, en términos generales, dos tipos de datos: **datos propietarios** y **datos abiertos**. Según buildingSMART, los datos abiertos pueden definirse como:
+
+> Datos disponibles / visibles para otros y que pueden ser utilizados libremente, reutilizados, reeditados y redistribuidos por cualquiera.
+
+En pocas palabras, la lectura de datos abiertos no está limitada a una única solución tecnológica. En cambio, los datos propietarios —también llamados nativos— suelen depender de aplicaciones específicas para poder ser interpretados correctamente.
+
+Esto es especialmente relevante en activos construidos, donde la información puede necesitarse durante muchos años. No existe garantía de que las soluciones futuras puedan acceder e interpretar correctamente archivos nativos de hoy. Trabajar con datos abiertos ayuda a reducir ese riesgo y facilita la reutilización de información a lo largo del ciclo de vida del proyecto.
+
+Open BIM puede entenderse como un enfoque universal para el diseño, la construcción y la operación colaborativa de edificios y activos, basado en flujos de trabajo y estándares abiertos.
+
+> buildingSMART.es
+
+La necesidad de utilizar datos abiertos está reconocida en la serie ISO 19650. En ISO 19650-1, cláusula 6.1, se indica que los intercambios de información deben realizarse usando estándares abiertos siempre que sea posible. Esta idea también se reitera en ISO 19650-2, cláusula 5.1.6.
+
+## Distintos formatos, distintas necesidades
+
+Para dar soporte a estos intercambios, buildingSMART ha desarrollado varias soluciones estandarizadas orientadas a datos abiertos y colaboración BIM:
+
+- **Industry Foundation Classes (IFC):** esquema específico de la industria, junto con extensiones y definición de formato de archivo. IFC está especificado en [ISO 16739](https://www.iso.org/standard/70303.html).
+- **Information Delivery Manual (IDM):** metodología para definir y documentar procesos y requisitos de información. IDM está especificado en [ISO 29481-1](https://www.iso.org/contents/data/standard/06/05/60553.html).
+- **Model View Definition (MVD):** implementación autorizada por buildingSMART del esquema IFC para satisfacer un propósito específico.
+- **BIM Collaboration Format (BCF):** protocolo de comunicación basado en modelos BIM e independiente de un software específico.
+- **buildingSMART Data Dictionary (bSDD):** biblioteca estándar de definiciones generales de objetos relacionados con activos y sus propiedades. bSDD ha sido desarrollado siguiendo los requisitos de [ISO 12006-3](https://www.iso.org/contents/data/standard/03/87/38706.html).
+
+Estas soluciones permiten atender distintas necesidades de intercambio y coordinación dentro de procesos alineados con ISO 19650. En el [siguiente post](/es/blog/open-bim-y-su-relacion-con-la-norma-iso-19650-2-2/) veremos con más detalle el papel de estos formatos dentro de las actividades contempladas por la norma.

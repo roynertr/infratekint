@@ -39,16 +39,17 @@ export const dataTranslations = {
  */
 export const textTranslations = {
   en: {
-    hero_text: "Driving digital transformation in the built environment",
+    hero_text: "BIM, structured data, and software—built for how your project actually delivers",
     hero_description:
-      "Advanced BIM, COBie, digital twins, and reality capture—so your data works as hard as your team.",
+      "From clash-ready coordination to COBie handover and custom integrations, we help owners, designers, and builders turn complex models into decisions you can trust.",
     back_to_all_posts: "Back to all posts",
     updated: "Updated",
   },
   es: {
-    hero_text: "Transformación digital en el entorno construido",
+    hero_text:
+      "BIM, datos estructurados y software—alineados con cómo su proyecto entrega de verdad",
     hero_description:
-      "BIM avanzado, COBie, gemelos digitales y captura de realidad—datos precisos para decisiones mejores.",
+      "De la coordinación lista para obra al handover COBie e integraciones a medida, ayudamos a propietarios, diseñadores y constructores a convertir modelos complejos en decisiones confiables.",
     back_to_all_posts: "Volver a todas las entradas",
     updated: "Actualizado",
   },

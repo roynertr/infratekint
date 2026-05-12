@@ -16,17 +16,28 @@ import { getTranslatedData } from "@js/translationUtils";
 // data
 const currLocale = getLocaleFromUrl(Astro.url);
 const faqData = getTranslatedData("faqData", currLocale);
+const copy = {
+  en: {
+    title: "Frequently Asked Questions",
+    description:
+      "Answers to common questions about BIM, COBie, digital twins, and how INFRATEK supports project teams.",
+  },
+  es: {
+    title: "Preguntas frecuentes",
+    description:
+      "Respuestas sobre BIM, COBie, gemelos digitales y cómo INFRATEK acompaña a los equipos de proyecto.",
+  },
+} as const;
+
+const t = copy[currLocale];
 ---
 
 <section id="faq-accordions" class="overflow-hidden py-24 md:py-28">
   <div class="site-container grid gap-10 md:grid-cols-2">
     <div class="mr-auto max-w-lg" data-mos="fade-right">
       <Badge>FAQ</Badge>
-      <h2 class="h2 mb-6">Frequently Asked Questions</h2>
-      <p class="description md:text-lg">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat consequuntur doloremque
-        saepe, laboriosam excepturi cumque nostrum tempora perferendis perspiciatis.
-      </p>
+      <h2 class="h2 mb-6">{t.title}</h2>
+      <p class="description md:text-lg">{t.description}</p>
     </div>
     <div class="flex flex-col gap-3" data-mos="fade-left">
       {faqData.map(({ question, answer }) => <Accordion title={question} details={answer} />)}

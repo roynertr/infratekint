@@ -16,61 +16,60 @@ const currLocale = getLocaleFromUrl(Astro.url);
 const siteData = getTranslatedData("siteData", currLocale);
 ---
 
-<BaseLayout title="Contact Me" description="Get in touch! Contact us using this page.">
+<BaseLayout
+  title="Contacto INFRATEK — BIM, COBie y apoyo digital de proyecto"
+  description="Escríbanos desde Estados Unidos o República Dominicana: coordinación BIM, COBie, gemelos digitales, captura de realidad y herramientas a medida."
+>
   <div class="site-container mx-auto mt-16 overflow-x-clip">
     <div
       class="w-full bg-[url('/assets/pattern-light.svg')] bg-center bg-no-repeat py-20 text-center md:py-32 dark:bg-[url('/assets/pattern-dark.svg')]"
     >
-      <h1 class="h1">Contact Us</h1>
-      <p class="description mx-auto mt-6 max-w-2xl">
-        When you fill out the form below, we will contact you to set up a time and take a look at
-        your project. We look forward to meeting you!
+      <h1 class="h1">Contacto</h1>
+      <p class="description mx-auto mt-6 max-w-2xl text-pretty">
+        Cuéntenos en pocas líneas su proyecto o reto de entrega de información. Responderemos por
+        correo y acordamos el siguiente paso: llamada, taller focalizado o propuesta formal, según
+        aplique.
       </p>
     </div>
 
     <div class="grid gap-8 lg:grid-cols-2">
-      <!-- contact form -->
       <div class="mb-12 lg:order-2">
-        <ContactForm />
+        <ContactForm locale="es" />
       </div>
 
-      <!-- Contact info -->
       <div class="mb-auto grid gap-x-6 gap-y-12 lg:grid-cols-2">
-        <!-- Email -->
         <div class="flex flex-col items-center gap-3 lg:items-start">
           <div
-            class="bg-primary-500 inline-flex size-12 items-center justify-center overflow-hidden rounded-full"
+            class="bg-brand-bg text-brand-malibu inline-flex size-12 items-center justify-center overflow-hidden rounded-full"
           >
-            <Icon name="tabler/mail" class="size-6 text-white" />
+            <Icon name="tabler/mail" class="size-6" />
           </div>
-          <h3 class="h3">Email</h3>
-          <a href="mailto:example@email.com" class="description hover:text-base-600 transition"
+          <h3 class="h3">Correo</h3>
+          <a href={`mailto:${siteData.contact.email}`} class="description hover:text-base-600 transition"
             >{siteData.contact.email}</a
           >
         </div>
 
-        <!-- Phone -->
         <div class="flex flex-col items-center gap-3 lg:items-start">
           <div
-            class="bg-primary-500 inline-flex size-12 items-center justify-center overflow-hidden rounded-full"
+            class="bg-brand-bg text-brand-malibu inline-flex size-12 items-center justify-center overflow-hidden rounded-full"
           >
-            <Icon name="tabler/phone" class="size-6 text-white" />
+            <Icon name="tabler/phone" class="size-6" />
           </div>
-          <h3 class="h3">Phone</h3>
+          <h3 class="h3">Teléfono</h3>
           <a
-            href={`tel:${siteData.contact.phone}`}
+            href={`tel:${siteData.contact.phone.replace(/\D/g, "")}`}
             class="description hover:text-base-600 transition">{siteData.contact.phone}</a
           >
         </div>
 
-        <!-- Address -->
         <div class="flex flex-col items-center gap-3 lg:items-start">
           <div
-            class="bg-primary-500 inline-flex size-12 items-center justify-center overflow-hidden rounded-full"
+            class="bg-brand-bg text-brand-malibu inline-flex size-12 items-center justify-center overflow-hidden rounded-full"
           >
-            <Icon name="tabler/map-pin" class="size-6 text-white" />
+            <Icon name="tabler/map-pin" class="size-6" />
           </div>
-          <h3 class="h3">Office</h3>
+          <h3 class="h3">Oficinas</h3>
           <div class="description flex flex-col items-center lg:items-start">
             <p>{siteData.contact.address1}</p>
             <p>{siteData.contact.address2}</p>

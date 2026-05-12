@@ -1,0 +1,6 @@
+name: Fenwal
+slug: fenwal
+alt: Fenwal logo
+logo: ./logo.png
+order: 10
+draft: false

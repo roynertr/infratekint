@@ -1,3 +1,7 @@
+/**
+ * Contact form endpoint — runs as a Vercel Serverless Function (and locally in `astro dev`).
+ * Env: RESEND_API_KEY (required); CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL (optional — see README / .env.example).
+ */
 import type { APIRoute } from "astro";
 
 export const prerender = false;
@@ -67,7 +71,7 @@ export const POST: APIRoute = async ({ request }) => {
   const to = (import.meta.env.CONTACT_TO_EMAIL as string | undefined) || "info@infratekint.com";
   const from =
     (import.meta.env.CONTACT_FROM_EMAIL as string | undefined) ||
-    "InfraTek Website <onboarding@resend.dev>";
+    "INFRATEK Website <onboarding@resend.dev>";
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -79,7 +83,7 @@ export const POST: APIRoute = async ({ request }) => {
       from,
       to: [to],
       reply_to: email,
-      subject: `InfraTek contact: ${name}`,
+      subject: `INFRATEK contact: ${name}`,
       html: `<p><strong>Name:</strong> ${escapeHtml(name)}</p>
 <p><strong>Email:</strong> ${escapeHtml(email)}</p>
 <p><strong>Phone:</strong> ${escapeHtml(phone || "—")}</p>

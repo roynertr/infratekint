@@ -18,7 +18,7 @@ import { useTranslations, getLocalizedRoute } from "@js/translationUtils";
 import person1 from "@images/company/royner-tineo.jpg";
 import person2 from "@images/company/collaborator-1.jpg";
 import person3 from "@images/company/collaborator-2.jpg";
-import heroImage from "@images/company/hero-main.png";
+import heroImage from "@images/company/infratek-hero-bim-professional.webp";
 
 const currLocale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(currLocale);
@@ -33,9 +33,9 @@ const t = useTranslations(currLocale);
       <div class="mb-16 w-full px-4 md:mb-0 md:w-1/2">
         <div data-mos="fade-right" data-mos-anchor="#hero-side">
           <span
-            class="bg-brand-bg mb-4 inline-flex items-center rounded-full px-2 py-px text-xs leading-5 text-[#66CBFF] uppercase"
+            class="bg-brand-bg text-brand-malibu border-brand-malibu/20 mb-4 inline-flex items-center rounded-full border px-3 py-1 text-xs leading-5 font-semibold uppercase"
           >
-            InfraTek
+            INFRATEK
           </span>
 
           <h1
@@ -61,8 +61,8 @@ const t = useTranslations(currLocale);
           <Button variant="primary" href={getLocalizedRoute(currLocale, "/contact")}>
             {currLocale === "es" ? "Contacto" : "Contact us"}
           </Button>
-          <Button variant="outline" href={getLocalizedRoute(currLocale, "/services/bim-services")}>
-            {currLocale === "es" ? "Servicios BIM" : "BIM services"}
+          <Button variant="outline" href={getLocalizedRoute(currLocale, "#services-side-image")}>
+            {currLocale === "es" ? "Nuestros servicios" : "Our services"}
           </Button>
         </div>
 
@@ -82,7 +82,7 @@ const t = useTranslations(currLocale);
                   <Image
                     src={person1}
                     class="object-cover"
-                    alt="reader"
+                    alt="Royner Tineo"
                     loading="eager"
                     width={100}
                   />
@@ -93,7 +93,7 @@ const t = useTranslations(currLocale);
                   <Image
                     src={person2}
                     class="object-cover"
-                    alt="reader"
+                    alt="INFRATEK collaborator"
                     loading="eager"
                     width={100}
                   />
@@ -104,7 +104,7 @@ const t = useTranslations(currLocale);
                   <Image
                     src={person3}
                     class="object-cover"
-                    alt="reader"
+                    alt="INFRATEK collaborator"
                     loading="eager"
                     width={100}
                   />
@@ -113,8 +113,8 @@ const t = useTranslations(currLocale);
             </div>
             <div class="flex-1 p-1.5 text-left">
               <p class="description max-w-[14rem] text-sm leading-tight tracking-tight">
-                Join 200+ happy and<br />
-                satisfied customers.
+                {currLocale === "es" ? "Experiencia BIM para equipos" : "BIM expertise for teams"}<br />
+                {currLocale === "es" ? "de diseño, obra y operación." : "across design, build, and operations."}
               </p>
             </div>
           </div>
@@ -136,11 +136,13 @@ const t = useTranslations(currLocale);
             class="text-accent-2 absolute -right-7 -bottom-8 z-10 aspect-[149/91] h-auto w-28"
             aria-hidden="true"
           />
-          <div class="rounded-7xl relative overflow-hidden rounded-2xl">
+          <div
+            class="relative overflow-hidden rounded-2xl border border-brand-botticelli/40 shadow-2xl shadow-black/15 ring-1 ring-black/5 dark:ring-white/10"
+          >
             <Image
               src={heroImage}
               class="h-auto min-w-full object-cover"
-              alt="small business owner"
+              alt="Industrial engineer reviewing a BIM model — INFRATEK"
               loading="eager"
               width={600}
               densities={[1.5, 2]}

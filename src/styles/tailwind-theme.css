@@ -4,7 +4,7 @@
  * These are in a separate file so it can be imported into <style> tags in .astro components
  */
 @theme {
-  /* InfraTek brand — Malibu primary (#66CBFF), Big Stone backgrounds via components */
+  /* INFRATEK brand — Malibu primary (#66CBFF), Big Stone backgrounds via components */
   --color-primary-50: #eff9ff;
   --color-primary-100: #dff4ff;
   --color-primary-200: #b8e9ff;
@@ -39,11 +39,11 @@
   --color-base-900: oklch(28.68% 0.0248 258.35);
   --color-base-950: oklch(25.39% 0.0216 257.28);
 
-  /* accents affect various SVG elements */
-  --color-accent-1: var(--color-yellow-500);
-  --color-accent-2: var(--color-blue-500);
-  --color-accent-3: var(--color-purple-500);
-  --color-accent-4: var(--color-red-500);
+  /* Brandbook accents for geometric SVG motifs and subtle highlights */
+  --color-accent-1: var(--color-brand-cruise);
+  --color-accent-2: var(--color-brand-malibu);
+  --color-accent-3: var(--color-brand-green);
+  --color-accent-4: var(--color-brand-jaffa);
 
   /* other theme settings */
   --button-transition-properties:

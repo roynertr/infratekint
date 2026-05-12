@@ -86,6 +86,30 @@ function absoluteOgImage(src: string): string {
 const imageUrl = optimizedImage?.src
   ? absoluteOgImage(optimizedImage.src)
   : absoluteOgImage(siteData.defaultImage.src);
+
+const ogMime = optimizedImage?.src
+  ? "image/webp"
+  : imageUrl.includes(".jpg") || imageUrl.includes(".jpeg")
+    ? "image/jpeg"
+    : "image/png";
+
+const twitterHandle = siteData.author.twitter?.trim?.() ?? "";
+const twitterOpts =
+  twitterHandle.length > 0
+    ? {
+        site: `@${twitterHandle.replace(/^@/, "")}`,
+        creator: `@${twitterHandle.replace(/^@/, "")}`,
+        card: "summary_large_image" as const,
+        title,
+        description,
+        image: imageUrl,
+      }
+    : {
+        card: "summary_large_image" as const,
+        title,
+        description,
+        image: imageUrl,
+      };
 ---
 
 <SEO
@@ -104,20 +128,13 @@ const imageUrl = optimizedImage?.src
       siteName: siteData.title,
     },
     image: {
-      type: "image/webp",
+      type: ogMime,
       width: Number(optimizedImage?.attributes.width) || 1200,
-      height: Number(optimizedImage?.attributes.height) || 800,
+      height: Number(optimizedImage?.attributes.height) || 630,
       alt: title,
     },
   }}
-  twitter={{
-    site: "@" + siteData.author.twitter,
-    creator: "@" + siteData.author.twitter,
-    card: "summary_large_image",
-    title: title,
-    description: description,
-    image: imageUrl,
-  }}
+  twitter={twitterOpts}
   noindex={noindex}
   nofollow={noindex}
 />

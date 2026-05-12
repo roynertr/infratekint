@@ -10,7 +10,7 @@ import Button from "@components/Button/Button.astro";
 import Category from "@components/Category/Category.astro";
 
 // utils
-import { formatDate, humanize, slugify } from "@js/textUtils";
+import { formatDate, humanize, slugify, normalizeImportedExcerpt } from "@js/textUtils";
 import { getLocaleFromUrl } from "@js/localeUtils";
 import { useTranslations, getLocalizedRoute } from "@js/translationUtils";
 
@@ -20,6 +20,7 @@ interface Props {
 
 const { post } = Astro.props as Props;
 const { title, description, authors, categories, pubDate, updatedDate, heroImage } = post.data;
+const normalizedDescription = normalizeImportedExcerpt(description);
 
 const currLocale = getLocaleFromUrl(Astro.url);
 const t = useTranslations(currLocale);
@@ -29,10 +30,10 @@ const authorsData = await getEntries(authors);
 <BaseLayout
   type="blog"
   title={title}
-  description={description}
+  description={normalizedDescription}
   image={heroImage}
   authorsData={authorsData}
-  postFrontmatter={post.data}
+  postFrontmatter={{ ...post.data, description: normalizedDescription }}
 >
   <article class="site-container mt-24">
     <!-- Blog post info -->

@@ -54,15 +54,17 @@ const currLocale = getLocaleFromUrl(Astro.url);
       noindex={noindex}
     />
   </head>
-  <body id="body" class={` ${siteSettings.useAnimations === true ? "use-animations" : ""}`}>
+  <body
+    id="body"
+    class={`flex min-h-dvh flex-col overflow-x-clip ${siteSettings.useAnimations === true ? "use-animations" : ""}`}
+  >
     <!-- put cookie consent first so it is seen first by screen readers -->
-    <!-- <CookieConsent /> -->
-    <div class="min-h-[100lvh]">
-      <Nav />
-      <main>
-        <slot />
-      </main>
-    </div>
+    <CookieConsent />
+    <!-- Nav is position:fixed — pt compensates so content clears the bar; flex-1 keeps footer at viewport bottom when main is short -->
+    <Nav />
+    <main class="w-full flex-1 pt-16">
+      <slot />
+    </main>
     <Footer />
 
     <!-- Scroll animations (data-mos starts at opacity:0 in mos.css until MOS runs — if init fails, body class is removed below) -->

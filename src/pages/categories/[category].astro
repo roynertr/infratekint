@@ -11,9 +11,13 @@ import PostCard from "@components/PostCard/PostCardAtlas.astro";
 
 // utils
 import { getAllPosts, countItems, sortByValue } from "@js/blogUtils";
-import { slugify, humanize } from "@js/textUtils";
+import { slugify } from "@js/textUtils";
+import { formatBlogCategoryLabel } from "@js/blogCategoryLabels";
 import { getLocaleFromUrl } from "@js/localeUtils";
 import { defaultLocale } from "@config/siteSettings.json";
+
+/** Static HTML per category (build time); enables getStaticPaths under hybrid SSR. */
+export const prerender = true;
 
 // generate pagination for tag pages if there are a bunch of posts for a single tag
 export async function getStaticPaths() {
@@ -44,8 +48,8 @@ const filteredPosts = posts.filter((post) => {
 ---
 
 <BaseLayout
-  title={`Our Blog Posts on ${humanize(category)}`}
-  description="Learn from our blog posts about web development, design, and more."
+  title={`INFRATEK blog: ${formatBlogCategoryLabel(category, currLocale)}`}
+  description="Articles on BIM, COBie, digital twins, software, and reality capture from INFRATEK."
 >
   <section class="site-container">
     <div
@@ -56,9 +60,10 @@ const filteredPosts = posts.filter((post) => {
           <Badge>Blog</Badge>
         </div>
         <h1 class="h1 text-center">
-          Posts on <span class="decoration-primary-500 underline"
-            >{humanize(category).toLowerCase()}</span
-          >
+          Posts on{" "}
+          <span class="decoration-primary-500 underline">
+            {formatBlogCategoryLabel(category, currLocale)}
+          </span>
         </h1>
       </div>
 

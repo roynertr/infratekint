@@ -8,18 +8,13 @@ import AutoImport from "astro-auto-import";
 import icon from "astro-icon";
 import react from "@astrojs/react";
 import keystatic from "@keystatic/astro";
-import cloudflare from "@astrojs/cloudflare";
+import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
-// react-dom/server.edge fixes Cloudflare Workers (MessageChannel); it breaks Node dev (require), so alias only in production build.
-const prod = process.env.NODE_ENV === "production";
-
 export default defineConfig({
   site: "https://infratekint.com",
   output: "server",
-  adapter: cloudflare({
-    imageService: "passthrough",
-  }),
+  adapter: vercel(),
   redirects: {
     "/admin": "/keystatic",
   },
@@ -55,7 +50,9 @@ export default defineConfig({
       },
     }),
     keystatic(),
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.includes("/examples"),
+    }),
     compress({
       HTML: true,
       JavaScript: true,
@@ -67,13 +64,6 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
-    resolve: {
-      alias: prod
-        ? {
-            "react-dom/server": "react-dom/server.edge",
-          }
-        : {},
-    },
     // stop inlining short scripts to fix issues with ClientRouter
     build: {
       assetsInlineLimit: 0,

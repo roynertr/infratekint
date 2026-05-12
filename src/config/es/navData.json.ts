@@ -1,5 +1,5 @@
 /**
- * InfraTek — navegación principal (Español)
+ * INFRATEK — navegación principal (Español)
  */
 
 import { type navItem } from "../types/configDataTypes";

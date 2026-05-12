@@ -1,0 +1,6 @@
+name: BHD
+slug: bhd
+alt: BHD logo
+logo: ./logo.png
+order: 30
+draft: false

@@ -1,57 +1,152 @@
 ---
 /**
- * * Centered services page layout. This has a title, description, main text, and an image if desired
- * The CTA and any other sections can be added in here so that all services pages have them
+ * Centered service page layout backed by structured service frontmatter.
  */
-import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
 
 // main layout
 import BaseLayout from "./BaseLayout.astro";
 
 // components
-import CtaCardSplit from "@components/Cta/CtaCardSplit.astro";
+import Button from "@components/Button/Button.astro";
+
+// utils
+import { getLocaleFromUrl } from "@js/localeUtils";
+import { getLocalizedRoute } from "@js/translationUtils";
 
 interface Props {
   title: string;
   description: string;
-  image?: ImageMetadata; // an imported image
+  image?: string;
+  /** When set with `image`, shown only in dark theme. */
+  imageDark?: string;
+  heroAlt?: string;
+  features?: string[];
+  cta?: {
+    label: string;
+    href: string;
+  };
+  seoTitle?: string;
 }
 
-const { title, description, image = undefined } = Astro.props as Props;
+const {
+  title,
+  description,
+  image,
+  imageDark,
+  heroAlt = title,
+  features = [],
+  cta,
+  seoTitle,
+} = Astro.props as Props;
+const heroImgClass =
+  "max-h-[52vh] w-full rounded-2xl border border-base-200/70 shadow-2xl dark:border-base-700 " +
+  (imageDark ? "bg-base-100 object-contain dark:bg-[#050a14]" : "object-cover");
+const currLocale = getLocaleFromUrl(Astro.url);
+const localizedCtaHref = cta ? getLocalizedRoute(currLocale, cta.href) : undefined;
 ---
 
-<BaseLayout title={title} description={description} image={image}>
+<BaseLayout title={seoTitle ?? title} description={description}>
   <!-- service heading -->
   <section class="site-container mt-16 flex w-full flex-col items-center overflow-x-clip">
     <div
-      class="w-full bg-[url('/assets/pattern-light.svg')] bg-center bg-no-repeat py-20 text-center md:py-32 dark:bg-[url('/assets/pattern-dark.svg')]"
+      class="bg-brand-bg w-full overflow-hidden rounded-3xl bg-[url('/assets/pattern-dark.svg')] bg-center bg-no-repeat px-6 py-20 text-center shadow-xl shadow-brand-bg/10 md:py-32"
     >
-      <h1 class="h1">{title}</h1>
+      <p class="border-brand-malibu/30 text-brand-malibu mx-auto mb-5 w-fit rounded-full border px-4 py-2 text-sm font-bold uppercase tracking-[0.24em]">
+        INFRATEK Services
+      </p>
+      <h1 class="h1 mx-auto max-w-4xl text-white">{title}</h1>
+      <p class="text-brand-cruise mx-auto mt-6 max-w-3xl text-lg md:text-xl">{description}</p>
     </div>
 
     <!-- service main image -->
     {
       image && (
-        <div class="-mt-12 max-w-[800px] overflow-hidden px-4 md:-mt-20">
-          <Image
-            src={image}
-            alt=""
-            width={1600}
-            quality="high"
-            class="max-h-[45vh] rounded-md object-cover"
-            loading="eager"
-          />
+        <div class="-mt-12 w-full max-w-[900px] overflow-hidden px-4 md:-mt-20">
+          {
+            imageDark ? (
+              <>
+                <img
+                  src={image}
+                  alt={heroAlt}
+                  class:list={[heroImgClass, "dark:hidden"]}
+                  loading="eager"
+                />
+                <img
+                  src={imageDark}
+                  alt={heroAlt}
+                  class:list={[heroImgClass, "hidden dark:block"]}
+                  loading="eager"
+                />
+              </>
+            ) : (
+              <img
+                src={image}
+                alt={heroAlt}
+                class:list={[heroImgClass]}
+                loading="eager"
+              />
+            )
+          }
         </div>
       )
     }
   </section>
 
+  {
+    features.length > 0 && (
+      <section class="site-container mt-20">
+        <div class="mx-auto max-w-5xl">
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((feature) => (
+              <div class="group rounded-2xl border border-base-200 bg-base-100 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-base-800 dark:bg-base-900">
+                <Icon
+                  name="tabler/circle-check"
+                  class="mb-4 size-7 text-accent-3"
+                  aria-hidden="true"
+                />
+                <p class="font-bold text-base-content">{feature}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   <!-- service details -->
-  <section class="my-20">
+  <section class="my-20 md:my-24">
     <div class="markdown-content mx-auto max-w-[800px] px-4">
       <slot />
     </div>
   </section>
 
-  <CtaCardSplit />
+  {
+    cta && localizedCtaHref && (
+      <section class="site-container pb-20 md:pb-28">
+        <div class="bg-brand-bg relative overflow-hidden rounded-3xl px-8 py-12 shadow-xl shadow-brand-bg/10 md:px-14 md:py-16">
+          <Icon
+            name="atlas/dots3"
+            class="text-accent-4 absolute top-5 left-5 size-16 opacity-80"
+            aria-hidden="true"
+          />
+          <div class="relative z-10 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+            <div class="max-w-2xl">
+              <p class="mb-3 text-sm font-bold uppercase tracking-[0.24em] text-accent-3">
+                INFRATEK
+              </p>
+              <h2 class="text-3xl font-bold tracking-tight text-white md:text-4xl">
+                {currLocale === "es"
+                  ? "Convirtamos este servicio en resultados medibles."
+                  : "Turn this service into measurable project outcomes."}
+              </h2>
+            </div>
+            <Button href={localizedCtaHref} variant="outline" class="shrink-0 shadow-none">
+              {cta.label}
+            </Button>
+          </div>
+        </div>
+      </section>
+    )
+  }
 </BaseLayout>

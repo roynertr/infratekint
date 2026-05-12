@@ -1,0 +1,26 @@
+---
+import { render } from "astro:content";
+
+// layout
+import BlogLayout from "@layouts/BlogLayoutCenter.astro";
+
+// components
+import ExternalLink from "@components/MarkdownComponents/ExternalLink.astro";
+
+// utils
+import { getAllPosts } from "@js/blogUtils";
+
+const { slug } = Astro.params;
+const posts = await getAllPosts("es");
+const post = posts.find((post) => post.id === slug);
+
+if (!post) {
+  return Astro.redirect("/es/404");
+}
+
+const { Content } = await render(post);
+---
+
+<BlogLayout post={post}>
+  <Content components={{ a: ExternalLink }} />
+</BlogLayout>

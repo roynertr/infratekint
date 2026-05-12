@@ -1,0 +1,44 @@
+---
+interface Props {
+  title: string;
+  size?: "card" | "hero";
+}
+
+const { title, size = "card" } = Astro.props as Props;
+const isHero = size === "hero";
+---
+
+<div
+  class:list={[
+    "relative isolate flex overflow-hidden bg-brand-bg text-white",
+    isHero ? "min-h-[360px] items-center justify-center p-10 md:min-h-[520px]" : "aspect-[16/10] items-end p-6",
+  ]}
+  aria-label={`Branded project visual for ${title}`}
+>
+  <div
+    class="absolute inset-0 opacity-[0.08]"
+    style="background-image: linear-gradient(#66CBFF 1px, transparent 1px), linear-gradient(90deg, #66CBFF 1px, transparent 1px); background-size: 34px 34px;"
+  >
+  </div>
+  <div class="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-brand-malibu/25 blur-3xl"></div>
+  <div class="absolute -bottom-20 left-10 h-56 w-56 rounded-full bg-brand-green/20 blur-3xl"></div>
+  <div class="absolute right-8 top-8 grid grid-cols-3 gap-2 opacity-70">
+    {Array.from({ length: 9 }).map(() => <span class="size-3 rounded-sm bg-brand-malibu/60"></span>)}
+  </div>
+
+  <div class:list={["relative", isHero ? "max-w-2xl text-center" : "max-w-sm"]}>
+    <p class="text-brand-malibu text-xs font-bold uppercase tracking-[0.35em]">
+      INFRATEK Case Study
+    </p>
+    <p
+      class:list={[
+        "mt-3 font-bold leading-tight text-white",
+        isHero ? "text-3xl md:text-5xl" : "text-xl",
+      ]}
+    >
+      {title}
+    </p>
+    <div class:list={["mt-5 h-1 rounded-full bg-brand-green", isHero ? "mx-auto w-32" : "w-20"]}>
+    </div>
+  </div>
+</div>

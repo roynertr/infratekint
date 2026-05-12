@@ -1,18 +1,11 @@
 ---
 /**
- * * These are small cards with icons, titles, and text. With title first
- * This looks best with an even number of cards. They are smaller to
- * use with more cards in the same section. 4 or 6 cards is probably ideal
- *
- * ! I copy all icons into the src/icons folder and recommend you do the same
- * ! If the icon is at src/icons/tabler/paint.svg then you put in "tabler/paint"
+ * Small feature cards — copy is localized EN/ES via locale from URL.
  */
-
-import { Icon } from "astro-icon/components";
-
-// components
 import FeatureCard from "@components/FeatureCard/FeatureCardSmall.astro";
 import Badge from "@components/Badge/Badge.astro";
+
+import { getLocaleFromUrl } from "@js/localeUtils";
 
 interface FeatureData {
   icon: string;
@@ -20,29 +13,66 @@ interface FeatureData {
   text: string;
 }
 
-// data
-const featureData: FeatureData[] = [
-  {
-    icon: "tabler/bulb",
-    title: "Business enhancement",
-    text: `We align BIM, data, and delivery so owners and contractors get measurable outcomes—not just models.`,
-  },
-  {
-    icon: "tabler/list-check",
-    title: "Data management",
-    text: `Structured information—COBie, properties, and handover—so facilities teams can operate with clarity.`,
-  },
-  {
-    icon: "tabler:code",
-    title: "Innovation & customization",
-    text: `Custom viewers, integrations, and digital twins when off-the-shelf tools stop short of your workflow.`,
-  },
-  {
-    icon: "tabler/circle-check",
-    title: "Precision & reliability",
-    text: `Disciplined coordination, validation, and documentation that hold up through construction and handover.`,
-  },
-];
+const currLocale = getLocaleFromUrl(Astro.url);
+
+const copy =
+  currLocale === "es"
+    ? {
+        badge: "Por qué INFRATEK",
+        heading: "Profundidad en BIM—con la disciplina de datos que esperan equipos locales y multinacionales",
+        lead: "Información estructurada, interoperabilidad Open BIM y coordinación ejecutable, con entrega pragmática que su equipo puede sostener cuando nos vamos de obra.",
+        cards: [
+          {
+            icon: "tabler/bulb",
+            title: "Resultados medibles, no escenografía BIM",
+            text: "Amarramos BIM, requisitos de datos y hitos para que haya menos apagafuegos en cierre—not solo navegadores llenos de modelos.",
+          },
+          {
+            icon: "tabler/list-check",
+            title: "Handover útil para operación",
+            text: "COBie, datos de activo y conjuntos de propiedades orientados al O&M que usted verdaderamente ejecuta—validados antes del acta.",
+          },
+          {
+            icon: "tabler:code",
+            title: "Software que respeta su CDE e IFC",
+            text: "Visores, APIs y automatización cuando los productos estándar se quedan en exportar—sin sumar licencias nadie usa.",
+          },
+          {
+            icon: "tabler/circle-check",
+            title: "Coordinación defendible ante junta técnica",
+            text: "Ritmo de clashes y QA, chequeos según PEP y registros para construcción real—sin parches urgentes antes de obra gruesa.",
+          },
+        ],
+      }
+    : {
+        badge: "Why INFRATEK",
+        heading: "Depth in BIM—with disciplined data habits owners and JV partners rely on",
+        lead: "Structured information, Open BIM interoperability, and buildable coordination—delivered pragmatically so your team can sustain the workflow.",
+        cards: [
+          {
+            icon: "tabler/bulb",
+            title: "Outcomes, not model theater",
+            text: `We tie BIM, data requirements, and delivery milestones so teams see fewer fire drills and cleaner closeout—not just a packed model browser.`,
+          },
+          {
+            icon: "tabler/list-check",
+            title: "Handover that operators can use",
+            text: `COBie, asset data, and property sets mapped to what your O&M teams need—validated before keys turn, not rebuilt from PDFs later.`,
+          },
+          {
+            icon: "tabler:code",
+            title: "Tools that match your CDE & IFC stack",
+            text: `Custom viewers, APIs, and workflow glue when generic platforms stop at export—without piling on shelfware nobody adopts.`,
+          },
+          {
+            icon: "tabler/circle-check",
+            title: "Coordination you can defend in review",
+            text: `Clash and QA rhythms, BEP-aligned checks, and evidence that stands up through construction—not last-minute patching.`,
+          },
+        ],
+      };
+
+const featureData: FeatureData[] = copy.cards;
 ---
 
 <section
@@ -50,12 +80,10 @@ const featureData: FeatureData[] = [
   class="bg-[url('/assets/pattern-light.svg')] bg-center bg-no-repeat py-24 md:py-28 dark:bg-[url('/assets/pattern-dark.svg')]"
 >
   <div class="site-container relative">
-    <div class="mx-auto mb-16 text-center md:max-w-4xl" data-mos="fade-up">
-      <Badge>Why InfraTek</Badge>
-      <h2 class="h2 mb-4">Maximizing client value with advanced BIM innovation</h2>
-      <p class="description text-lg text-pretty md:text-xl">
-        We combine technical depth with pragmatic delivery—so technology serves the project, not the other way around.
-      </p>
+    <div class="mx-auto mb-16 max-w-4xl text-center" data-mos="fade-up">
+      <Badge>{copy.badge}</Badge>
+      <h2 class="h2 mx-auto mb-4 max-w-3xl text-balance">{copy.heading}</h2>
+      <p class="description mx-auto max-w-3xl text-lg text-pretty md:text-xl">{copy.lead}</p>
     </div>
     <div id="trigger-small-cards" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
