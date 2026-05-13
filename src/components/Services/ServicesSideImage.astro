@@ -6,7 +6,7 @@
 import ServiceCard from "@components/ServiceCard/ServiceCardSideImage.astro";
 import Badge from "@components/Badge/Badge.astro";
 
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { filterCollectionByLanguage, getLocaleFromUrl } from "@js/localeUtils";
 
 const currLocale = getLocaleFromUrl(Astro.url);
@@ -14,20 +14,20 @@ const currLocale = getLocaleFromUrl(Astro.url);
 const services = await getCollection("services", ({ data }) => data.draft !== true);
 const serviceData = filterCollectionByLanguage(services, currLocale).sort(
   (a, b) => a.data.order - b.data.order,
-);
+) as CollectionEntry<"services">[];
 
 const copy = {
   en: {
     badge: "Services",
     title: "Solutions across the project lifecycle",
     description: "BIM, structured handover, and tailored software scoped to your standards, tools, and schedule.",
-    button: "Learn more",
+    learnMoreAbout: "Learn more about",
   },
   es: {
     badge: "Servicios",
     title: "Soluciones para todo el ciclo de vida del proyecto",
     description: "BIM, entrega estructurada y software a medida según sus estándares, herramientas y calendario.",
-    button: "Conocer más",
+    learnMoreAbout: "Conocer más sobre",
   },
 } as const;
 
@@ -53,7 +53,7 @@ const t = copy[currLocale];
             imageSide={idx % 2 === 0 ? "right" : "left"}
             href={`/services/${service.id}/`}
             idx={idx}
-            buttonLabel={t.button}
+            buttonLabel={`${t.learnMoreAbout} ${service.data.title}`}
           />
         ))
       }
