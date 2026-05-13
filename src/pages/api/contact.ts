@@ -93,7 +93,14 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (!res.ok) {
     const errText = await res.text();
-    return new Response(JSON.stringify({ ok: false, error: errText || "Email send failed" }), {
+    let error = errText || "Email send failed";
+    try {
+      const j = JSON.parse(errText) as { message?: string; name?: string };
+      if (j.message) error = [j.name, j.message].filter(Boolean).join(": ") || error;
+    } catch {
+      /* keep plain text body */
+    }
+    return new Response(JSON.stringify({ ok: false, error }), {
       status: 502,
       headers: { "Content-Type": "application/json" },
     });
