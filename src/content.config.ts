@@ -102,6 +102,15 @@ const servicesCollection = defineCollection({
         href: z.string(),
       }),
       seoTitle: z.string().optional(),
+      seoDescription: z.string().optional(),
+      ctaHeading: z.string().optional(),
+      ctaLead: z.string().optional(),
+      ctaSecondary: z
+        .object({
+          label: z.string(),
+          href: z.string(),
+        })
+        .optional(),
       // mappingKey allows you to match entries across languages for SEO purposes
       mappingKey: z.string().optional(),
       // services will be excluded from build if draft is "true"

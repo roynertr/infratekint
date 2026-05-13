@@ -1,6 +1,5 @@
 ---
-import { type InferGetStaticPropsType } from "astro";
-import { getCollection, render } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 
 // layout
 import ServiceLayoutCenter from "@layouts/ServiceLayoutCenter.astro";
@@ -28,9 +27,7 @@ export async function getStaticPaths() {
     props: post,
   }));
 }
-type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
-const service = Astro.props as Props;
+const service = Astro.props as CollectionEntry<"services">;
 const { Content } = await render(service);
 ---
 

@@ -27,6 +27,14 @@ interface Props {
     href: string;
   };
   seoTitle?: string;
+  /** Meta / Open Graph only; hero subtitle stays `description`. */
+  seoDescription?: string;
+  ctaHeading?: string;
+  ctaLead?: string;
+  ctaSecondary?: {
+    label: string;
+    href: string;
+  };
 }
 
 const {
@@ -38,22 +46,32 @@ const {
   features = [],
   cta,
   seoTitle,
+  seoDescription,
+  ctaHeading,
+  ctaLead,
+  ctaSecondary,
 } = Astro.props as Props;
 const heroImgClass =
   "max-h-[52vh] w-full rounded-2xl border border-base-200/70 shadow-2xl dark:border-base-700 " +
   (imageDark ? "bg-base-100 object-contain dark:bg-[#050a14]" : "object-cover");
 const currLocale = getLocaleFromUrl(Astro.url);
 const localizedCtaHref = cta ? getLocalizedRoute(currLocale, cta.href) : undefined;
+const localizedSecondaryHref = ctaSecondary
+  ? getLocalizedRoute(currLocale, ctaSecondary.href)
+  : undefined;
+const metaDescription = seoDescription ?? description;
+const hasCustomCta = Boolean(ctaHeading);
+const serviceEyebrow = currLocale === "es" ? "Servicios INFRATEK" : "INFRATEK Services";
 ---
 
-<BaseLayout title={seoTitle ?? title} description={description}>
+<BaseLayout title={seoTitle ?? title} description={metaDescription}>
   <!-- service heading -->
   <section class="site-container mt-16 flex w-full flex-col items-center overflow-x-clip">
     <div
       class="bg-brand-bg w-full overflow-hidden rounded-3xl bg-[url('/assets/pattern-dark.svg')] bg-center bg-no-repeat px-6 py-20 text-center shadow-xl shadow-brand-bg/10 md:py-32"
     >
       <p class="border-brand-malibu/30 text-brand-malibu mx-auto mb-5 w-fit rounded-full border px-4 py-2 text-sm font-bold uppercase tracking-[0.24em]">
-        INFRATEK Services
+        {serviceEyebrow}
       </p>
       <h1 class="h1 mx-auto max-w-4xl text-white">{title}</h1>
       <p class="text-brand-cruise mx-auto mt-6 max-w-3xl text-lg md:text-xl">{description}</p>
@@ -130,21 +148,54 @@ const localizedCtaHref = cta ? getLocalizedRoute(currLocale, cta.href) : undefin
             class="text-accent-4 absolute top-5 left-5 size-16 opacity-80"
             aria-hidden="true"
           />
-          <div class="relative z-10 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-            <div class="max-w-2xl">
-              <p class="mb-3 text-sm font-bold uppercase tracking-[0.24em] text-accent-3">
-                INFRATEK
-              </p>
-              <h2 class="text-3xl font-bold tracking-tight text-white md:text-4xl">
-                {currLocale === "es"
-                  ? "Convirtamos este servicio en resultados medibles."
-                  : "Turn this service into measurable project outcomes."}
-              </h2>
-            </div>
-            <Button href={localizedCtaHref} variant="outline" class="shrink-0 shadow-none">
-              {cta.label}
-            </Button>
-          </div>
+          {
+            hasCustomCta ? (
+              <div class="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+                <div class="max-w-2xl">
+                  <p class="mb-3 text-sm font-bold uppercase tracking-[0.24em] text-accent-3">
+                    INFRATEK
+                  </p>
+                  <h2 class="text-3xl font-bold tracking-tight text-white md:text-4xl">
+                    {ctaHeading}
+                  </h2>
+                  {ctaLead && <p class="text-brand-cruise mt-4 text-lg leading-relaxed">{ctaLead}</p>}
+                </div>
+                <div class="flex shrink-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                  <Button href={localizedCtaHref} variant="primary" class="shadow-none" arrow="none">
+                    {cta.label}
+                  </Button>
+                  {
+                    ctaSecondary && localizedSecondaryHref && (
+                      <Button
+                        href={localizedSecondaryHref}
+                        variant="outline"
+                        class="shadow-none"
+                        arrow="none"
+                      >
+                        {ctaSecondary.label}
+                      </Button>
+                    )
+                  }
+                </div>
+              </div>
+            ) : (
+              <div class="relative z-10 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+                <div class="max-w-2xl">
+                  <p class="mb-3 text-sm font-bold uppercase tracking-[0.24em] text-accent-3">
+                    INFRATEK
+                  </p>
+                  <h2 class="text-3xl font-bold tracking-tight text-white md:text-4xl">
+                    {currLocale === "es"
+                      ? "Convirtamos este servicio en resultados medibles."
+                      : "Turn this service into measurable project outcomes."}
+                  </h2>
+                </div>
+                <Button href={localizedCtaHref} variant="outline" class="shrink-0 shadow-none" arrow="none">
+                  {cta.label}
+                </Button>
+              </div>
+            )
+          }
         </div>
       </section>
     )
