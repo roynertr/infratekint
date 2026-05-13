@@ -64,6 +64,13 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    // Ignore adapter/build output so `astro dev` does not watch thousands of files or
+    // retrigger content sync (can race on OneDrive/antivirus and break `/es/` with 500).
+    server: {
+      watch: {
+        ignored: ["**/.vercel/**", "**/dist/**"],
+      },
+    },
     // stop inlining short scripts to fix issues with ClientRouter
     build: {
       assetsInlineLimit: 0,
