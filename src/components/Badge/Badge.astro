@@ -1,9 +1,22 @@
 ---
+interface Props {
+  href?: string;
+}
 
+const { href } = Astro.props;
+
+const baseClass =
+  "bg-brand-bg text-brand-malibu border-brand-malibu/20 shadow-brand-bg/10 mb-4 inline-block rounded-full border px-3 py-1 text-xs leading-5 font-semibold uppercase shadow-sm transition-opacity hover:opacity-90 dark:border-brand-malibu/30 dark:bg-brand-malibu/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-malibu focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-brand-bg";
 ---
 
-<span
-  class="bg-brand-bg text-brand-malibu border-brand-malibu/20 shadow-brand-bg/10 mb-4 inline-block rounded-full border px-3 py-1 text-xs leading-5 font-semibold uppercase shadow-sm dark:border-brand-malibu/30 dark:bg-brand-malibu/10"
->
-  <slot />
-</span>
+{
+  href ? (
+    <a href={href} class:list={[baseClass, "no-underline"]}>
+      <slot />
+    </a>
+  ) : (
+    <span class={baseClass}>
+      <slot />
+    </span>
+  )
+}

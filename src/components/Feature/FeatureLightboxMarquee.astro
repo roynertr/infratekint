@@ -14,6 +14,7 @@ import Badge from "@components/Badge/Badge.astro";
 
 // utils
 import { getLocaleFromUrl } from "@js/localeUtils";
+import { getLocalizedRoute } from "@js/translationUtils";
 
 const marqueeEntries = await getCollection("homeMarquee");
 const marqueeEntry =
@@ -59,6 +60,7 @@ const copy = {
 } as const;
 
 const t = copy[currLocale];
+const portfolioHref = getLocalizedRoute(currLocale, "/portfolio");
 ---
 
 <section
@@ -67,7 +69,7 @@ const t = copy[currLocale];
 >
   <div class="site-container flex justify-center">
     <div class="mx-auto mb-16 text-center md:max-w-4xl" data-mos="fade-up">
-      <Badge>{t.badge}</Badge>
+      <Badge href={portfolioHref}>{t.badge}</Badge>
       <h2 class="h2">{t.title}</h2>
       <p class="description mt-4 text-lg text-pretty md:text-xl">
         {t.description}

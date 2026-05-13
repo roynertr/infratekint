@@ -68,5 +68,10 @@ export default defineConfig({
     build: {
       assetsInlineLimit: 0,
     },
+    // Keystatic: pre-bundle in dev so the browser uses `.vite/deps/*`, not `/node_modules/*`
+    // (SSR catch‑all `[...page].astro` may otherwise intercept `/node_modules/...` in dev).
+    optimizeDeps: {
+      include: ["@keystatic/core", "@keystatic/core/ui", "lodash/debounce"],
+    },
   },
 });

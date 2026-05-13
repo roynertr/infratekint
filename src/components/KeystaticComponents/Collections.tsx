@@ -348,34 +348,35 @@ const HomeMarquee = () =>
     columns: ["slug"],
     format: { data: "yaml" },
     schema: {
-      slug: fields.slug({
-        name: {
-          label: "Entry name",
-          validation: {
-            isRequired: true,
-          },
-        },
-        slug: {
-          label: "Slug",
-          description: "Keep this as home-marquee — single entry for the home page strip.",
-        },
+      // Flat name + slug match src/data/**/index.yaml and Astro content.config.ts;
+      // fields.slug() would nest under `slug:` in YAML and broke this entry in the CMS.
+      name: fields.text({
+        label: "Entry name",
+        validation: { isRequired: true },
       }),
+      slug: fields.text({
+        label: "Slug",
+        description: "Keep this as home-marquee — single entry for the home page strip.",
+        validation: { isRequired: true },
+      }),
+      // Keep images under src/data so Astro `image()` resolves them; publicPath must not
+      // point at `public/` or YAML gets broken paths and the home marquee shows old assets.
       imageBim: fields.image({
         label: "Image 1 — BIM / coordination",
         directory: "src/data/home-marquee/images",
-        publicPath: "../../../public/",
+        publicPath: "../images/",
         validation: { isRequired: true },
       }),
       imageCobie: fields.image({
         label: "Image 2 — COBie / data",
         directory: "src/data/home-marquee/images",
-        publicPath: "../../../public/",
+        publicPath: "../images/",
         validation: { isRequired: true },
       }),
       imageDigital: fields.image({
         label: "Image 3 — Digital delivery",
         directory: "src/data/home-marquee/images",
-        publicPath: "../../../public/",
+        publicPath: "../images/",
         validation: { isRequired: true },
       }),
     },
@@ -392,17 +393,14 @@ const HomeTrustedBy = () =>
     columns: ["slug"],
     format: { data: "yaml" },
     schema: {
-      slug: fields.slug({
-        name: {
-          label: "Entry name",
-          validation: {
-            isRequired: true,
-          },
-        },
-        slug: {
-          label: "Slug",
-          description: "Keep as home-trusted-by — one entry for this section.",
-        },
+      name: fields.text({
+        label: "Entry name",
+        validation: { isRequired: true },
+      }),
+      slug: fields.text({
+        label: "Slug",
+        description: "Keep as home-trusted-by — one entry for this section.",
+        validation: { isRequired: true },
       }),
       eyebrowEn: fields.text({
         label: "Eyebrow (English)",
@@ -444,17 +442,14 @@ const ClientLogos = () =>
     columns: ["slug", "order"],
     format: { data: "yaml" },
     schema: {
-      slug: fields.slug({
-        name: {
-          label: "Brand name",
-          validation: {
-            isRequired: true,
-          },
-        },
-        slug: {
-          label: "Folder slug",
-          description: "Short ID for this entry (folder name). Do not change after publish if possible.",
-        },
+      name: fields.text({
+        label: "Brand name",
+        validation: { isRequired: true },
+      }),
+      slug: fields.text({
+        label: "Folder slug",
+        description: "Short ID for this entry (folder name). Do not change after publish if possible.",
+        validation: { isRequired: true },
       }),
       alt: fields.text({
         label: "Image alt text",

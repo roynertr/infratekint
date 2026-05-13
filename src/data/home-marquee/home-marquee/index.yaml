@@ -1,5 +1,5 @@
 name: Home marquee
 slug: home-marquee
-imageBim: ../images/service-bim.jpg
-imageCobie: ../images/service-cobie.jpg
-imageDigital: ../images/service-digital.jpg
+imageBim: ../images/home-marquee/imageBim.png
+imageCobie: ../images/home-marquee/imageCobie.png
+imageDigital: ../images/home-marquee/imageDigital.png
