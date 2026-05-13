@@ -42,6 +42,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     pathname.startsWith("/api/") ||
     pathname.startsWith("/keystatic") ||
     pathname.startsWith("/_image") ||
+    pathname.startsWith("/_vercel") ||
     pathname.startsWith("/admin")
   ) {
     return next();

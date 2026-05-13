@@ -14,7 +14,8 @@ import vercel from "@astrojs/vercel";
 export default defineConfig({
   site: "https://infratekint.com",
   output: "server",
-  adapter: vercel(),
+  // Production: Vercel Image Optimization (`/_vercel/image`); dev stays on Sharp via the adapter default.
+  adapter: vercel({ imageService: true }),
   redirects: {
     "/admin": "/keystatic",
   },
