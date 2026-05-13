@@ -1,6 +1,6 @@
 {
-  "name": "Atlas",
-  "short_name": "Atlas",
+  "name": "INFRATEK",
+  "short_name": "INFRATEK",
   "icons": [
     {
       "src": "/favicons/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#22c55e",
-  "background_color": "#22c55e",
+  "theme_color": "#0A2333",
+  "background_color": "#0A2333",
   "display": "standalone"
 }

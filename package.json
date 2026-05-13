@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "blog:rewrite": "node ./scripts/blog-rewrite.mjs",
     "blog:rewrite:build": "node ./scripts/blog-rewrite.mjs --build",
-    "generate:og": "node ./scripts/generate-og.mjs"
+    "generate:og": "node ./scripts/generate-og.mjs",
+    "generate:favicons": "node ./scripts/generate-favicons.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "4.3.7",
@@ -58,6 +59,7 @@
     "lodash.debounce": "4.0.8",
     "lodash.throttle": "4.1.1",
     "prettier-plugin-astro": "0.14.1",
+    "png-to-ico": "^2.1.8",
     "prettier-plugin-tailwindcss": "0.7.1",
     "sharp": "^0.34.5",
     "typescript-eslint": "8.46.1"
