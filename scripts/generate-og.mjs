@@ -1,8 +1,8 @@
 /**
  * Generates public/images/infratek-og.jpg (1200×630) for Open Graph.
- * Prefers horizontal logo PNG if present; otherwise falls back to SVG text.
+ * Uses the light horizontal logo (infratek-logo-horizontal-dark.svg) on Big Stone.
  *
- * Run from website/: node scripts/generate-og.mjs
+ * Run from website/: npm run generate:og
  */
 import { createRequire } from "node:module";
 import { writeFileSync, existsSync } from "node:fs";
@@ -23,27 +23,28 @@ try {
 const width = 1200;
 const height = 630;
 const publicDir = join(__dirname, "..", "public", "images");
-const logoPng = join(publicDir, "Logos PNG + SVG", "Logo Horizontal", "Recurso 40.png");
+const logoSvg = join(publicDir, "infratek-logo-horizontal-dark.svg");
 const out = join(publicDir, "infratek-og.jpg");
 
 // Brand: Big Stone #0A2333
 const bgRgb = { r: 10, g: 35, b: 51 };
 
-async function fromLogoPng() {
-  if (!existsSync(logoPng)) {
+async function fromLogoSvg() {
+  if (!existsSync(logoSvg)) {
     return null;
   }
-  const logoBuffer = await sharp(logoPng)
+
+  const logoBuffer = await sharp(logoSvg)
     .resize({
       width: 820,
-      height: 300,
+      height: 200,
       fit: "inside",
       withoutEnlargement: false,
     })
     .png()
     .toBuffer();
 
-  const buf = await sharp({
+  return sharp({
     create: {
       width,
       height,
@@ -54,26 +55,24 @@ async function fromLogoPng() {
     .composite([{ input: logoBuffer, gravity: "centre" }])
     .jpeg({ quality: 90, mozjpeg: true })
     .toBuffer();
-
-  return buf;
 }
 
 async function fromSvgFallback() {
   const svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
   <rect width="100%" height="100%" fill="#0A2333"/>
-  <text x="72" y="320" font-family="system-ui,-apple-system,sans-serif" font-size="46" font-weight="700" fill="#66CBFF">INFRATEK</text>
-  <text x="72" y="390" font-family="system-ui,-apple-system,sans-serif" font-size="28" font-weight="500" fill="#BFD8E4">BIM • COBie • Digital twins • Reality capture</text>
+  <text x="600" y="300" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="72" font-weight="700" fill="#66CBFF">INFRATEK</text>
+  <text x="600" y="370" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="28" font-weight="500" fill="#BFD8E4">BIM • COBie • Digital twins • Reality capture</text>
 </svg>`;
   return sharp(Buffer.from(svg)).jpeg({ quality: 88 }).toBuffer();
 }
 
-const fromPng = await fromLogoPng();
-const buf = fromPng ?? (await fromSvgFallback());
+const fromLogo = await fromLogoSvg();
+const buf = fromLogo ?? (await fromSvgFallback());
 
 writeFileSync(out, buf);
-if (fromPng) {
-  console.log("Wrote", out, "(from", logoPng + ")");
+if (fromLogo) {
+  console.log("Wrote", out, "(from", logoSvg + ")");
 } else {
-  console.warn("Logo PNG not found at:", logoPng);
-  console.log("Wrote", out, "(SVG fallback)");
+  console.warn("Logo SVG not found at:", logoSvg);
+  console.log("Wrote", out, "(SVG text fallback)");
 }

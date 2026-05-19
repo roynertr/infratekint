@@ -47,16 +47,22 @@ let optimizedImage;
 let jsonLD;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 
+async function buildOgImage(src: ImageMetadata) {
+  return getImage({
+    src,
+    format: "jpeg",
+    quality: "high",
+    width: 1200,
+    height: 630,
+    fit: "cover",
+  });
+}
+
 // if this is a blog page we do things differently
 if (type === "blog") {
   const { authors, postFrontmatter } = Astro.props as BlogProps;
 
-  optimizedImage = await getImage({
-    src: image,
-    format: "webp",
-    quality: "high",
-    width: 1200,
-  });
+  optimizedImage = await buildOgImage(image);
 
   jsonLD = jsonLDGenerator({
     type: "blog",
@@ -66,7 +72,15 @@ if (type === "blog") {
     canonicalUrl: canonicalUrl,
   });
 }
-// for general pages
+// portfolio and other general pages with a hero image
+else if (image) {
+  optimizedImage = await buildOgImage(image);
+
+  jsonLD = jsonLDGenerator({
+    type: "general",
+  });
+}
+// for general pages without a hero image
 else {
   jsonLD = jsonLDGenerator({
     type: "general",
@@ -88,7 +102,7 @@ const imageUrl = optimizedImage?.src
   : absoluteOgImage(siteData.defaultImage.src);
 
 const ogMime = optimizedImage?.src
-  ? "image/webp"
+  ? "image/jpeg"
   : imageUrl.includes(".jpg") || imageUrl.includes(".jpeg")
     ? "image/jpeg"
     : "image/png";
