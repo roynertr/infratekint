@@ -1,6 +1,6 @@
 /**
  * Generates public/images/infratek-og.jpg (1200×630) for Open Graph.
- * Uses the light horizontal logo (infratek-logo-horizontal-dark.svg) on Big Stone.
+ * Uses the full-color horizontal logo on Big Stone.
  *
  * Run from website/: npm run generate:og
  */
@@ -23,18 +23,18 @@ try {
 const width = 1200;
 const height = 630;
 const publicDir = join(__dirname, "..", "public", "images");
-const logoSvg = join(publicDir, "infratek-logo-horizontal-dark.svg");
+const logoPng = join(publicDir, "Logos PNG + SVG", "Logo Horizontal", "Logo Full Color.png");
 const out = join(publicDir, "infratek-og.jpg");
 
 // Brand: Big Stone #0A2333
 const bgRgb = { r: 10, g: 35, b: 51 };
 
-async function fromLogoSvg() {
-  if (!existsSync(logoSvg)) {
+async function fromLogoPng() {
+  if (!existsSync(logoPng)) {
     return null;
   }
 
-  const logoBuffer = await sharp(logoSvg)
+  const logoBuffer = await sharp(logoPng)
     .resize({
       width: 820,
       height: 200,
@@ -66,13 +66,13 @@ async function fromSvgFallback() {
   return sharp(Buffer.from(svg)).jpeg({ quality: 88 }).toBuffer();
 }
 
-const fromLogo = await fromLogoSvg();
+const fromLogo = await fromLogoPng();
 const buf = fromLogo ?? (await fromSvgFallback());
 
 writeFileSync(out, buf);
 if (fromLogo) {
-  console.log("Wrote", out, "(from", logoSvg + ")");
+  console.log("Wrote", out, "(from", logoPng + ")");
 } else {
-  console.warn("Logo SVG not found at:", logoSvg);
+  console.warn("Logo PNG not found at:", logoPng);
   console.log("Wrote", out, "(SVG text fallback)");
 }
