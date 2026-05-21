@@ -22,6 +22,12 @@ const { class: className, ...rest } = Astro.props as Props;
 
 const currLocale = getLocaleFromUrl(Astro.url);
 
+const switcherLabel = (lang: (typeof locales)[number]) => {
+  if (currLocale === "es" && lang === "en") return "English";
+  if (currLocale === "en" && lang === "es") return "Español";
+  return languageSwitcherMap[lang];
+};
+
 // Precompute the localized paths for each locale (since getLocalizedPathname is async)
 const localizedPaths = Object.fromEntries(
   await Promise.all(
@@ -45,7 +51,7 @@ const localizedPaths = Object.fromEntries(
     aria-haspopup="true"
     aria-controls="lang-select__dropdown-content"
   >
-    <span class="sr-only">Change language</span>
+    <span class="sr-only">{currLocale === "es" ? "Cambiar idioma" : "Change language"}</span>
     <Icon
       name="tabler/language"
       aria-hidden="true"
@@ -77,11 +83,17 @@ const localizedPaths = Object.fromEntries(
             <a
               class="primary-focus nav__link--base relative block w-full py-1 whitespace-nowrap"
               href={localizedPaths[lang]}
-              aria-label={`Change language to ${lang.toUpperCase()}`}
+              aria-label={
+                currLocale === "es" && lang === "en"
+                  ? "Cambiar a inglés"
+                  : currLocale === "en" && lang === "es"
+                    ? "Change language to Spanish"
+                    : `Change language to ${lang.toUpperCase()}`
+              }
               data-infratek-locale={lang}
               data-astro-reload
             >
-              {languageSwitcherMap[lang]}
+              {switcherLabel(lang)}
             </a>
           </li>
         ))

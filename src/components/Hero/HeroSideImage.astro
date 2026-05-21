@@ -93,7 +93,7 @@ const t = useTranslations(currLocale);
                   <Image
                     src={person2}
                     class="object-cover"
-                    alt="INFRATEK collaborator"
+                    alt={currLocale === "es" ? "Colaborador de INFRATEK" : "INFRATEK collaborator"}
                     loading="eager"
                     width={100}
                   />
@@ -104,7 +104,7 @@ const t = useTranslations(currLocale);
                   <Image
                     src={person3}
                     class="object-cover"
-                    alt="INFRATEK collaborator"
+                    alt={currLocale === "es" ? "Colaborador de INFRATEK" : "INFRATEK collaborator"}
                     loading="eager"
                     width={100}
                   />
@@ -113,8 +113,8 @@ const t = useTranslations(currLocale);
             </div>
             <div class="flex-1 p-1.5 text-left">
               <p class="description max-w-[14rem] text-sm leading-tight tracking-tight">
-                {currLocale === "es" ? "Experiencia BIM para equipos" : "BIM expertise for teams"}<br />
-                {currLocale === "es" ? "de diseño, obra y operación." : "across design, build, and operations."}
+                {currLocale === "es" ? "BIM y entrega digital" : "BIM expertise for teams"}<br />
+                {currLocale === "es" ? "para equipos multidisciplinarios." : "across design, build, and operations."}
               </p>
             </div>
           </div>

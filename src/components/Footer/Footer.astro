@@ -41,7 +41,7 @@ const today = new Date();
     <div class="site-container mt-6 flex flex-wrap justify-between gap-6">
       <div class="my-auto">
         &copy; {today.getFullYear()}
-        {" "}{siteData.name}. All rights reserved.
+        {" "}{siteData.name}. {currLocale === "es" ? "Todos los derechos reservados." : "All rights reserved."}
       </div>
       <div class="flex flex-col items-end gap-1 text-right">
         <a class="text-brand-malibu hover:text-brand-green transition" href={`mailto:${siteData.contact.email}`}>

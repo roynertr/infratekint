@@ -47,9 +47,9 @@ export const textTranslations = {
   },
   es: {
     hero_text:
-      "BIM, datos estructurados y software—alineados con cómo su proyecto entrega de verdad",
+      "BIM, datos estructurados y software para una entrega digital confiable",
     hero_description:
-      "De la coordinación lista para obra al handover COBie e integraciones a medida, ayudamos a propietarios, diseñadores y constructores a convertir modelos complejos en decisiones confiables.",
+      "Ayudamos a propietarios, diseñadores y constructores a coordinar modelos, validar información y convertir datos complejos en decisiones claras para diseño, construcción y operación.",
     back_to_all_posts: "Volver a todas las entradas",
     updated: "Actualizado",
   },

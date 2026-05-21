@@ -4,22 +4,22 @@ export const faqData: FaqItem[] = [
   {
     question: "¿Qué servicios BIM ofrecen?",
     answer:
-      "Apoyamos estándares de modelado, coordinación, interferencias y documentación alineada a su plan de ejecución BIM—ajustado al tamaño y madurez del proyecto.",
+      "Ofrecemos implementación BIM, coordinación, gestión BIM, control de calidad de modelos, modelado 3D, modelado as-built, BIM 5D y soporte para entregables digitales.",
   },
   {
     question: "¿Cómo encaja COBie en la entrega?",
     answer:
-      "COBie estructura datos de instalación para que operación reciba atributos consistentes. Ayudamos a definir requisitos, mapear datos y validar antes del handover.",
+      "COBie ayuda a estructurar la información de activos para operación y mantenimiento. INFRATEK puede apoyar en la definición, validación y entrega de datos COBie alineados con los requisitos del proyecto.",
   },
   {
     question: "¿Pueden crear herramientas a medida con IFC o nuestra CDE?",
     answer:
-      "Sí. Combinamos conocimiento BIM con desarrollo para entregar visores, integraciones y flujos acordes a cómo trabaja su equipo.",
+      "Sí. Podemos desarrollar visores, automatizaciones, reportes e integraciones usando IFC, datos BIM, APIs y plataformas existentes del proyecto.",
   },
   {
     question: "¿Trabajan con proyectos internacionales?",
     answer:
-      "Colaboramos con equipos en distintas regiones y adaptamos entregables a sus estándares, herramientas y calendarios—con trabajo remoto cuando conviene.",
+      "Sí. INFRATEK puede apoyar equipos remotos y proyectos en diferentes mercados, especialmente cuando se requiere coordinación BIM, Open BIM, COBie o gestión estructurada de información.",
   },
 ];
 
