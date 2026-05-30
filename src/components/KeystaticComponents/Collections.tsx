@@ -379,6 +379,24 @@ const HomeMarquee = () =>
         publicPath: "../images/",
         validation: { isRequired: true },
       }),
+      imageDigitalTwin: fields.image({
+        label: "Image 4 — Digital twin / BIM model",
+        directory: "src/data/home-marquee/images",
+        publicPath: "../images/",
+        validation: { isRequired: true },
+      }),
+      imageProjectDelivery: fields.image({
+        label: "Image 5 — Project delivery dashboard",
+        directory: "src/data/home-marquee/images",
+        publicPath: "../images/",
+        validation: { isRequired: true },
+      }),
+      imageDataIntegration: fields.image({
+        label: "Image 6 — Data integration",
+        directory: "src/data/home-marquee/images",
+        publicPath: "../images/",
+        validation: { isRequired: true },
+      }),
     },
   });
 

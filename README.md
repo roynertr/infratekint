@@ -35,6 +35,8 @@ Smoke test (with key set): send a JSON POST to `http://localhost:4321/api/contac
    - `RESEND_API_KEY` — required for the contact form (502/503 without it).
    - `CONTACT_TO_EMAIL` — optional (default `info@infratekint.com`).
    - `CONTACT_FROM_EMAIL` — optional; use a verified domain in Resend, e.g. `INFRATEK <info@infratekint.com>`.
+   - `PUBLIC_TURNSTILE_SITE_KEY` — recommended; enables Cloudflare Turnstile widget on the contact form.
+   - `TURNSTILE_SECRET_KEY` — recommended; verifies Turnstile tokens server-side in `/api/contact`.
 5. Custom domain: add `infratekint.com` in Vercel → **Domains**.
 6. **Preview deployments:** enabled per branch/PR when using the Git integration.
 
@@ -43,6 +45,12 @@ Smoke test (with key set): send a JSON POST to `http://localhost:4321/api/contac
 - Add the API key in Vercel **Settings → Environment Variables** for Production and Preview (and in `.env` locally).
 - Verify your sending domain in Resend; set `CONTACT_FROM_EMAIL` accordingly.
 - The default `onboarding@resend.dev` sender only works for Resend-approved test recipients until a domain is verified.
+
+## Cloudflare Turnstile (Contact form)
+
+- Create a Turnstile widget for your domain in Cloudflare Dashboard.
+- Set `PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in Vercel and locally in `.env`.
+- When `TURNSTILE_SECRET_KEY` is set, `/api/contact` requires a valid Turnstile token before sending email.
 
 ## Demo routes (`/examples`)
 

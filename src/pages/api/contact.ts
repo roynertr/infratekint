@@ -1,10 +1,22 @@
 /**
  * Contact form endpoint — runs as a Vercel Serverless Function (and locally in `astro dev`).
- * Env: RESEND_API_KEY (required); CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL (optional — see README / .env.example).
+ * Env: RESEND_API_KEY (required); CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL (optional);
+ *      TURNSTILE_SECRET_KEY (optional, recommended for bot protection).
  */
 import type { APIRoute } from "astro";
 
 export const prerender = false;
+
+type TurnstileResponse = {
+  success: boolean;
+  "error-codes"?: string[];
+};
+
+function getClientIp(request: Request): string {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  if (forwardedFor) return forwardedFor.split(",")[0]?.trim() || "";
+  return request.headers.get("x-real-ip") || "";
+}
 
 function escapeHtml(s: string): string {
   return s
@@ -20,6 +32,7 @@ export const POST: APIRoute = async ({ request }) => {
   let email = "";
   let phone = "";
   let message = "";
+  let turnstileToken = "";
 
   try {
     if (contentType.includes("application/json")) {
@@ -28,12 +41,14 @@ export const POST: APIRoute = async ({ request }) => {
       email = String(body.email ?? "").trim();
       phone = String(body.phone ?? "").trim();
       message = String(body.message ?? "").trim();
+      turnstileToken = String(body.turnstileToken ?? "").trim();
     } else {
       const form = await request.formData();
       name = String(form.get("name") ?? "").trim();
       email = String(form.get("email") ?? "").trim();
       phone = String(form.get("phone") ?? "").trim();
       message = String(form.get("message") ?? "").trim();
+      turnstileToken = String(form.get("cf-turnstile-response") ?? "").trim();
     }
   } catch {
     return new Response(JSON.stringify({ ok: false, error: "Invalid request body" }), {
@@ -58,6 +73,51 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const apiKey = import.meta.env.RESEND_API_KEY as string | undefined;
+  const turnstileSecretKey = import.meta.env.TURNSTILE_SECRET_KEY as string | undefined;
+
+  if (turnstileSecretKey) {
+    if (!turnstileToken) {
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: "Please complete the captcha verification.",
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } },
+      );
+    }
+
+    const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: turnstileSecretKey,
+        response: turnstileToken,
+        remoteip: getClientIp(request),
+      }),
+    });
+
+    if (!verifyRes.ok) {
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: "Captcha verification is unavailable. Please try again.",
+        }),
+        { status: 502, headers: { "Content-Type": "application/json" } },
+      );
+    }
+
+    const verifyData = (await verifyRes.json()) as TurnstileResponse;
+    if (!verifyData.success) {
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: "Captcha verification failed. Please try again.",
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } },
+      );
+    }
+  }
+
   if (!apiKey) {
     return new Response(
       JSON.stringify({

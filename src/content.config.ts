@@ -10,6 +10,9 @@ const homeMarqueeCollection = defineCollection({
       imageBim: image(),
       imageCobie: image(),
       imageDigital: image(),
+      imageDigitalTwin: image(),
+      imageProjectDelivery: image(),
+      imageDataIntegration: image(),
     }),
 });
 

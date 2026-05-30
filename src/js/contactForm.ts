@@ -8,6 +8,7 @@ export type ContactFormStrings = {
   loading: string;
   sending: string;
   send: string;
+  captcha: string;
 };
 
 const iconCheck =
@@ -18,6 +19,18 @@ const iconSpinner =
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5 shrink-0 animate-spin" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
 
 let activeController: AbortController | null = null;
+let activeWidgetId: string | null = null;
+
+type TurnstileApi = {
+  render: (container: HTMLElement, options: { sitekey: string; theme?: "light" | "dark" | "auto" }) => string;
+  reset: (widgetId?: string) => void;
+};
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
 
 function clearLegacyQueryParams() {
   if (!window.location.search) return;
@@ -53,6 +66,15 @@ export function initContactForm() {
   const statusTitle = document.getElementById("contact-form-status-title");
   const statusDetail = document.getElementById("contact-form-status-detail");
   const submitBtn = document.getElementById("contact-submit") as HTMLButtonElement | null;
+  const captchaEl = form.querySelector(".cf-turnstile") as HTMLElement | null;
+
+  if (captchaEl && window.turnstile) {
+    const sitekey = captchaEl.getAttribute("data-sitekey");
+    if (sitekey) {
+      captchaEl.innerHTML = "";
+      activeWidgetId = window.turnstile.render(captchaEl, { sitekey, theme: "auto" });
+    }
+  }
 
   function setStatus(state: "loading" | "success" | "error", title: string, detail: string) {
     if (!statusEl || !statusIcon || !statusTitle || !statusDetail) return;
@@ -108,7 +130,17 @@ export function initContactForm() {
         email: String(fd.get("email") || "").trim(),
         phone: String(fd.get("phone") || "").trim(),
         message: String(fd.get("message") || "").trim(),
+        turnstileToken: String(fd.get("cf-turnstile-response") || "").trim(),
       };
+
+      if (captchaEl && !payload.turnstileToken) {
+        setStatus("error", strings.errTitle, strings.captcha);
+        submitBtn.disabled = false;
+        submitBtn.removeAttribute("aria-busy");
+        submitBtn.textContent = strings.send;
+        form.removeAttribute("aria-busy");
+        return;
+      }
 
       try {
         const res = await fetch("/api/contact", {
@@ -121,6 +153,9 @@ export function initContactForm() {
         if (res.ok && data.ok) {
           setStatus("success", strings.okTitle, strings.ok);
           form.reset();
+          if (window.turnstile) {
+            window.turnstile.reset(activeWidgetId ?? undefined);
+          }
           clearLegacyQueryParams();
         } else {
           setStatus("error", strings.errTitle, data.error || strings.err);

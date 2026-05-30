@@ -20,13 +20,14 @@ const strings =
         help: "¿En qué podemos ayudarte?",
         send: "Enviar mensaje",
         sending: "Enviando…",
-        okTitle: "Mensaje enviado",
-        ok: "Gracias — recibimos tu mensaje y te responderemos pronto.",
-        errTitle: "No se pudo enviar",
-        err: "No se pudo enviar el mensaje. Inténtelo más tarde.",
+        okTitle: "Mensaje enviado con exito",
+        ok: "Gracias por escribirnos. Recibimos tu mensaje y te responderemos en breve.",
+        errTitle: "No pudimos enviarlo",
+        err: "Hubo un problema al enviar tu mensaje. Intenta de nuevo en unos minutos.",
         netTitle: "Error de conexión",
-        net: "Comprueba tu conexión e inténtalo de nuevo.",
+        net: "Parece que tu conexión se interrumpió. Revisa internet e inténtalo otra vez.",
         loading: "Enviando tu mensaje…",
+        captcha: "Completa la verificación de seguridad para continuar.",
       }
     : {
         name: "Name",
@@ -37,13 +38,16 @@ const strings =
         send: "Send message",
         sending: "Sending…",
         okTitle: "Message sent",
-        ok: "Thank you — we received your message and will reply soon.",
-        errTitle: "Could not send",
-        err: "Could not send your message. Please try again later.",
+        ok: "Thanks for reaching out. We received your message and will get back to you soon.",
+        errTitle: "We couldn't send it",
+        err: "Something went wrong while sending your message. Please try again in a moment.",
         netTitle: "Connection error",
-        net: "Check your connection and try again.",
+        net: "Your connection may have dropped. Please check it and try again.",
         loading: "Sending your message…",
+        captcha: "Please complete the security check before sending.",
       };
+
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
 
 const i18n = JSON.stringify({
   okTitle: strings.okTitle,
@@ -55,6 +59,7 @@ const i18n = JSON.stringify({
   loading: strings.loading,
   sending: strings.sending,
   send: strings.send,
+  captcha: strings.captcha,
 });
 ---
 
@@ -137,6 +142,13 @@ const i18n = JSON.stringify({
         placeholder={strings.help}
         required></textarea>
     </div>
+    {
+      turnstileSiteKey && (
+        <div class="contact-form-captcha">
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="auto"></div>
+        </div>
+      )
+    }
     <Button variant="primary" type="submit" id="contact-submit">{strings.send}</Button>
   </form>
 </section>
@@ -176,6 +188,10 @@ const i18n = JSON.stringify({
   #contact-submit[disabled] {
     @apply cursor-not-allowed opacity-70;
   }
+
+  .contact-form-captcha {
+    @apply flex justify-start;
+  }
 </style>
 
 <script>
@@ -184,3 +200,12 @@ const i18n = JSON.stringify({
   initContactForm();
   document.addEventListener("astro:page-load", initContactForm);
 </script>
+{
+  turnstileSiteKey && (
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer
+    ></script>
+  )
+}

@@ -25,22 +25,38 @@ if (!marqueeEntry) {
   );
 }
 
-const { imageBim, imageCobie, imageDigital } = marqueeEntry.data;
+const {
+  imageBim,
+  imageCobie,
+  imageDigital,
+  imageDigitalTwin,
+  imageProjectDelivery,
+  imageDataIntegration,
+} = marqueeEntry.data;
+
+const marqueeImages = [
+  imageBim,
+  imageCobie,
+  imageDigital,
+  imageDigitalTwin,
+  imageProjectDelivery,
+  imageDataIntegration,
+];
 
 interface MarqueeImages {
   images: Array<typeof imageBim>;
 }
 
 const marqueeTop: MarqueeImages = {
-  images: [imageBim, imageCobie, imageDigital, imageBim, imageCobie, imageDigital],
+  images: [...marqueeImages, ...marqueeImages],
 };
 
 const marqueeMiddle: MarqueeImages = {
-  images: [imageCobie, imageDigital, imageBim, imageCobie, imageDigital, imageBim],
+  images: [...marqueeImages.slice(2), ...marqueeImages, ...marqueeImages.slice(0, 2)],
 };
 
 const marqueeBottom: MarqueeImages = {
-  images: [imageDigital, imageBim, imageCobie, imageDigital, imageBim, imageCobie],
+  images: [...marqueeImages.slice(4), ...marqueeImages, ...marqueeImages.slice(0, 4)],
 };
 
 const currLocale = getLocaleFromUrl(Astro.url);
