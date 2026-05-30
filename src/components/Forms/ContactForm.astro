@@ -19,9 +19,14 @@ const strings =
         message: "Mensaje",
         help: "¿En qué podemos ayudarte?",
         send: "Enviar mensaje",
-        ok: "Gracias — tu mensaje se ha enviado.",
+        sending: "Enviando…",
+        okTitle: "Mensaje enviado",
+        ok: "Gracias — recibimos tu mensaje y te responderemos pronto.",
+        errTitle: "No se pudo enviar",
         err: "No se pudo enviar el mensaje. Inténtelo más tarde.",
-        net: "Error de red. Inténtelo de nuevo.",
+        netTitle: "Error de conexión",
+        net: "Comprueba tu conexión e inténtalo de nuevo.",
+        loading: "Enviando tu mensaje…",
       }
     : {
         name: "Name",
@@ -30,14 +35,40 @@ const strings =
         message: "Message",
         help: "How can we help?",
         send: "Send message",
-        ok: "Thank you — your message has been sent.",
-        err: "Could not send message. Please try again later.",
-        net: "Network error. Please try again.",
+        sending: "Sending…",
+        okTitle: "Message sent",
+        ok: "Thank you — we received your message and will reply soon.",
+        errTitle: "Could not send",
+        err: "Could not send your message. Please try again later.",
+        netTitle: "Connection error",
+        net: "Check your connection and try again.",
+        loading: "Sending your message…",
       };
+
+const iconCheck =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5 shrink-0"><path d="M20 6 9 17l-5-5"/></svg>';
+const iconAlert =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5 shrink-0"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>';
+const iconSpinner =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-5 shrink-0 animate-spin" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
 ---
 
 <section id="contact" class="mx-auto max-w-3xl min-w-fit rounded-lg">
   <form id="contact-form" class="flex flex-col gap-4" data-locale={locale} novalidate>
+    <div
+      id="contact-form-status"
+      class="contact-form-status hidden"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <span id="contact-form-status-icon" class="mt-0.5" aria-hidden="true"></span>
+      <div class="min-w-0 flex-1">
+        <p id="contact-form-status-title" class="font-semibold leading-snug"></p>
+        <p id="contact-form-status-detail" class="mt-1 text-sm leading-relaxed"></p>
+      </div>
+    </div>
+
     <div class="grid gap-4 sm:grid-cols-2">
       <div class="flex flex-col">
         <label for="contact-name" class="form__label sr-only"
@@ -93,23 +124,113 @@ const strings =
         placeholder={strings.help}
         required></textarea>
     </div>
-    <p id="contact-form-status" class="description hidden text-sm" role="status"></p>
     <Button variant="primary" type="submit" id="contact-submit">{strings.send}</Button>
   </form>
 </section>
 
-<script define:vars={{ okMsg: strings.ok, errMsg: strings.err, netMsg: strings.net }}>
-  const form = document.getElementById("contact-form") as HTMLFormElement | null;
+<style>
+  .contact-form-status {
+    @apply flex items-start gap-3 rounded-xl border px-4 py-3 text-sm transition-all duration-200;
+  }
+
+  .contact-form-status--loading {
+    @apply border-brand-botticelli bg-brand-botticelli/30 text-brand-bg;
+  }
+
+  .contact-form-status--success {
+    @apply border-brand-green/50 bg-brand-cruise/40 text-brand-bg;
+  }
+
+  .contact-form-status--error {
+    @apply border-brand-jaffa/60 bg-brand-jaffa/10 text-brand-bg;
+  }
+
+  .dark .contact-form-status--loading {
+    @apply border-brand-malibu/30 bg-brand-malibu/10 text-brand-malibu;
+  }
+
+  .dark .contact-form-status--success {
+    @apply border-brand-green/40 bg-brand-green/10 text-brand-cruise;
+  }
+
+  .dark .contact-form-status--error {
+    @apply border-brand-jaffa/50 bg-brand-jaffa/15 text-brand-cruise;
+  }
+
+  #contact-submit[disabled] {
+    @apply cursor-not-allowed opacity-70;
+  }
+</style>
+
+<script
+  define:vars={{
+    okTitle: strings.okTitle,
+    okMsg: strings.ok,
+    errTitle: strings.errTitle,
+    errMsg: strings.err,
+    netTitle: strings.netTitle,
+    netMsg: strings.net,
+    loadingMsg: strings.loading,
+    sendingLabel: strings.sending,
+    sendLabel: strings.send,
+    iconCheck,
+    iconAlert,
+    iconSpinner,
+  }}
+>
+  const form = document.getElementById("contact-form");
   const statusEl = document.getElementById("contact-form-status");
-  const submitBtn = document.getElementById("contact-submit") as HTMLButtonElement | null;
+  const statusIcon = document.getElementById("contact-form-status-icon");
+  const statusTitle = document.getElementById("contact-form-status-title");
+  const statusDetail = document.getElementById("contact-form-status-detail");
+  const submitBtn = document.getElementById("contact-submit");
+
+  /** @param {"loading" | "success" | "error"} state */
+  function setStatus(state, title, detail) {
+    if (!statusEl || !statusIcon || !statusTitle || !statusDetail) return;
+
+    statusEl.classList.remove(
+      "hidden",
+      "contact-form-status--loading",
+      "contact-form-status--success",
+      "contact-form-status--error",
+    );
+    statusEl.classList.add(`contact-form-status--${state}`);
+    statusEl.setAttribute("role", state === "error" ? "alert" : "status");
+
+    statusTitle.textContent = title;
+    statusDetail.textContent = detail;
+
+    if (state === "loading") statusIcon.innerHTML = iconSpinner;
+    else if (state === "success") statusIcon.innerHTML = iconCheck;
+    else statusIcon.innerHTML = iconAlert;
+
+    statusEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function hideStatus() {
+    if (!statusEl || !statusTitle || !statusDetail || !statusIcon) return;
+    statusEl.classList.add("hidden");
+    statusEl.classList.remove(
+      "contact-form-status--loading",
+      "contact-form-status--success",
+      "contact-form-status--error",
+    );
+    statusTitle.textContent = "";
+    statusDetail.textContent = "";
+    statusIcon.innerHTML = "";
+  }
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!statusEl || !submitBtn) return;
+    if (!submitBtn) return;
 
-    statusEl.classList.add("hidden");
-    statusEl.textContent = "";
+    hideStatus();
     submitBtn.disabled = true;
+    submitBtn.setAttribute("aria-busy", "true");
+    submitBtn.textContent = sendingLabel;
+    form.setAttribute("aria-busy", "true");
+    setStatus("loading", sendingLabel, loadingMsg);
 
     const fd = new FormData(form);
     const payload = {
@@ -125,24 +246,21 @@ const strings =
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(payload),
       });
-      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      const data = await res.json().catch(() => ({}));
 
       if (res.ok && data.ok) {
-        statusEl.textContent = okMsg;
-        statusEl.classList.remove("hidden", "text-brand-jaffa");
-        statusEl.classList.add("text-brand-green");
+        setStatus("success", okTitle, okMsg);
         form.reset();
       } else {
-        statusEl.textContent = data.error || errMsg;
-        statusEl.classList.remove("hidden", "text-brand-green");
-        statusEl.classList.add("text-brand-jaffa");
+        setStatus("error", errTitle, data.error || errMsg);
       }
     } catch {
-      statusEl.textContent = netMsg;
-      statusEl.classList.remove("hidden", "text-brand-green");
-      statusEl.classList.add("text-brand-jaffa");
+      setStatus("error", netTitle, netMsg);
     } finally {
       submitBtn.disabled = false;
+      submitBtn.removeAttribute("aria-busy");
+      submitBtn.textContent = sendLabel;
+      form.removeAttribute("aria-busy");
     }
   });
 </script>
