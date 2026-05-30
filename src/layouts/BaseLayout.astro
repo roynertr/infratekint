@@ -6,6 +6,7 @@ import BaseHead from "@layouts/BaseHead.astro";
 import Nav from "@components/Nav/Nav.astro";
 import Footer from "@components/Footer/Footer.astro";
 import CookieConsent from "@components/CookieConsent/CookieConsent.astro";
+import Analytics from "@vercel/analytics/astro";
 
 // style import
 import "@/styles/global.css";
@@ -66,6 +67,7 @@ const currLocale = getLocaleFromUrl(Astro.url);
       <slot />
     </main>
     <Footer />
+    <Analytics />
 
     <!-- Scroll animations (data-mos starts at opacity:0 in mos.css until MOS runs — if init fails, body class is removed below) -->
     <script>

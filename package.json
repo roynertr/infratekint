@@ -31,6 +31,7 @@
     "@tailwindcss/vite": "4.1.14",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
+    "@vercel/analytics": "^2.0.1",
     "astro": "5.18.1",
     "astro-auto-import": "0.4.5",
     "astro-icon": "1.1.5",
@@ -58,8 +59,8 @@
     "gray-matter": "^4.0.3",
     "lodash.debounce": "4.0.8",
     "lodash.throttle": "4.1.1",
-    "prettier-plugin-astro": "0.14.1",
     "png-to-ico": "^2.1.8",
+    "prettier-plugin-astro": "0.14.1",
     "prettier-plugin-tailwindcss": "0.7.1",
     "sharp": "^0.34.5",
     "typescript-eslint": "8.46.1"
