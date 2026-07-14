@@ -15,22 +15,60 @@ export function slugify(text: string): string {
     .replace(/-+$/, ""); // trim dash from end of text
 }
 
+/** Industry / product acronyms that should stay uppercase when humanizing slugs. */
+const HUMANIZE_ACRONYMS = new Set([
+  "acc",
+  "bim",
+  "cad",
+  "cde",
+  "cobie",
+  "dwg",
+  "ifc",
+  "ifc4",
+  "ipd",
+  "iso",
+  "lod",
+  "mep",
+  "og",
+  "rvt",
+  "vr",
+]);
+
 /**
- * * returns "humanized" text. runs slugify() and then replaces - with space and upper case first letter of every word, and lower case the rest
+ * * returns "humanized" text for slug-like labels (e.g. `bim-services` → `BIM Services`).
+ * Preserves Unicode letters (accents). Does not strip characters the way slugify() does.
  * @param text: string - text to humanize
  */
 export function humanize(text: string): string {
-  const slugifiedText = slugify(text);
-  return (
-    slugifiedText
-      .replace(/-/g, " ") // replace "-" with space
-      // .toLowerCase();
-      .replace(
-        // upper case first letter of every word, and lower case the rest
-        /\w\S*/g,
-        (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(),
-      )
-  );
+  return text
+    .toString()
+    .trim()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/\S+/g, (word) => {
+      const lower = word.toLocaleLowerCase("es");
+      if (HUMANIZE_ACRONYMS.has(lower)) return lower.toUpperCase();
+      // Keep short all-caps tokens (INICA, CDE, ISO…)
+      if (word.length <= 6 && word === word.toLocaleUpperCase("es") && /\p{L}/u.test(word)) {
+        return word;
+      }
+      return word.charAt(0).toLocaleUpperCase("es") + word.slice(1).toLocaleLowerCase("es");
+    });
+}
+
+/**
+ * Portfolio / content tags are authored as display labels (often with accents and acronyms).
+ * Show them as written; only humanize pure slug-like values (e.g. `bim-modeling`).
+ */
+export function formatTagLabel(tag: string): string {
+  const trimmed = tag.toString().trim();
+  if (!trimmed) return "";
+  const hasSpace = /\s/.test(trimmed);
+  const hasUppercaseLetter = /\p{Lu}/u.test(trimmed);
+  const hasNonAscii = /[^\u0000-\u007f]/.test(trimmed);
+  // Already a display label — do not reformat (preserves accents, BIM, INICA, etc.)
+  if (hasSpace || hasUppercaseLetter || hasNonAscii) return trimmed;
+  return humanize(trimmed);
 }
 
 /**

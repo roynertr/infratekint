@@ -11,7 +11,7 @@ import PortfolioFallbackVisual from "@components/Portfolio/PortfolioFallbackVisu
 
 // utils
 import { getAllPortfolio } from "@js/portfolioUtils";
-import { formatDate, humanize, normalizeImportedExcerpt } from "@js/textUtils";
+import { formatDate, formatTagLabel, humanize, normalizeImportedExcerpt } from "@js/textUtils";
 
 const { slug } = Astro.params;
 const projects = await getAllPortfolio("es");
@@ -84,7 +84,7 @@ const normalizedDescription = normalizeImportedExcerpt(description);
               <div>
                 <dt class="text-base-400 font-semibold uppercase tracking-wide">Etiquetas</dt>
                 <dd class="mt-2 flex flex-wrap gap-2">
-                  {tags.map((tag) => <span>{humanize(tag)}</span>)}
+                  {tags.map((tag) => <span>{formatTagLabel(tag)}</span>)}
                 </dd>
               </div>
             )
