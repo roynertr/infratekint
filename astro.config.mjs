@@ -15,7 +15,10 @@ export default defineConfig({
   site: "https://infratekint.com",
   output: "server",
   // Production: Vercel Image Optimization (`/_vercel/image`); dev stays on Sharp via the adapter default.
-  adapter: vercel({ imageService: true }),
+  adapter: vercel({
+    imageService: true,
+    webAnalytics: { enabled: true },
+  }),
   redirects: {
     "/admin": "/keystatic",
   },
